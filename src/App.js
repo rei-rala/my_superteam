@@ -1,24 +1,28 @@
-import logo from './logo.svg';
+import { useContext } from 'react';
 import './App.css';
+import { UserLogged } from './context/UserLoggedContext';
+
+import Login from './components/Login/Login';
+import LogOut from './components/Logout/Logout';
+
+import SearchHeroPage from './components/SearchHeroPage/SearchHeroPage';
+
 
 function App() {
+  const { isUserLogged } = useContext(UserLogged)
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      {
+        !isUserLogged
+          ? <Login />
+          : <>
+            <SearchHeroPage />
+            <LogOut />
+
+          </>
+      }
+    </>
   );
 }
 

@@ -1,12 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+
+import { UserLoggedContext } from './context/UserLoggedContext';
+
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+
+    <UserLoggedContext  >
+      <App />
+    </UserLoggedContext>
+
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -1,3 +1,24 @@
+## Changelog:  
+
+##### 19-08-2021:
+Inicializacion.
+<figure>
+  <figcaption>Featuring:</figcaption>
+  <ul>
+    <li>Context de sesion</li>
+    <li>Axios para http request</li>
+    <li>Componentes:
+      <ul>
+        <li>Login/Logout</li>
+        <li>Contenedor-pagina de busqueda heroe</li>
+      </ul>
+    </li>
+  </ul>
+</figure>
+
+# <hr>
+
+###### Default CRA
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
