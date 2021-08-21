@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, {  useState } from 'react'
 import SearchHero from './SearchHero/SearchHero'
 
 const SearchHeroPage = () => {

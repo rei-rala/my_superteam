@@ -5,7 +5,7 @@ const axios = require('axios').default
 
 
 const Login = () => {
-  const { manageUserLogged } = useContext(UserLogged)
+  const { manageUserLogged, manageUsernameLogged } = useContext(UserLogged)
 
   const [userInfo, setUserInfo] = useState({})
   const manageUserInfo = (credentials) => setUserInfo(credentials)
@@ -50,15 +50,20 @@ const Login = () => {
           if (r.status === 200) {
             console.log(`Iniciado con exito. Codigo ${r.status}`)
             localStorage.setItem('superteam_access', r.data.token)
-
-            manageUserLogged(true)
-            return r
+            localStorage.setItem('superteam_email', userInfo.email)
+            manageUsernameLogged(userInfo.email)
+            return true
           }
         })
         .catch(err => {
           manageTriedWrongCredentials(true)
         })
-        .finally(() => manageLoggingIn(false))
+        .finally(validLogIn => {
+          manageLoggingIn(false)
+          if (validLogIn) {
+            manageUserLogged(true)
+          }
+        })
     }
 
     if (loggingIn) { logIn() }
@@ -94,17 +99,25 @@ const Login = () => {
       return digestHex === 'd211897d86c8d4ccff699e0b071530ae68b3de359ec4a8801736341b5a9933f8'
     }
 
+
     const tryRetrieve = async () => {
-      if (localStorage.getItem('superteam_access')) {
-        if (await compareWithDigestHex(localStorage.getItem('superteam_access'))) {
-          manageUserLogged(true)
-          console.log(`Logged ${await compareWithDigestHex(localStorage.getItem('superteam_access'))}`)
-        }
+      const sessionInLocalStorage = {
+        access: localStorage.getItem('superteam_access'),
+        email: localStorage.getItem('superteam_email')
+      }
+
+      if (sessionInLocalStorage.access && sessionInLocalStorage.access !== undefined) {
+        /*         console.table(sessionInLocalStorage)
+                const compare = await compareWithDigestHex(sessionInLocalStorage.access)
+                if (compare) { */
+        manageUserLogged(true)
+        manageUsernameLogged(sessionInLocalStorage.email)
+
+        console.log(`Logged`)
       }
     }
-
     tryRetrieve()
-  }, [manageUserLogged])
+  }, [manageUserLogged, manageUsernameLogged])
 
 
   return (
