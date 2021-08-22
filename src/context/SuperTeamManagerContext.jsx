@@ -7,32 +7,59 @@ export const SuperTeamManagerContext = ({ children }) => {
   //const { isUserLogged } = useContext(UserLogged)
 
   const [superTeam, setSuperTeam] = useState([])
+  const manageSuperTeam = (team) => setSuperTeam(team)
 
   const [averagePowerStats, setAveragePowerStats] = useState(null)
   const manageAveragePowerStats = (powerStatsObject) => setAveragePowerStats(powerStatsObject)
+
+  
+    const checkMaxTeam = () => {
+      return superTeam
+        ? superTeam.lenght >= 6 ?
+          true
+          : false
+        : false
+    }
+
+  const checkAlignment = (hero) => {
+    return hero.biography.alignment
+  }  
+
+  const checkMaxByAlignment = (hero) => {
+    return superTeam.filter(heroInTeam => checkAlignment(heroInTeam) === checkAlignment(hero)).length >= 3
+  }    
 
   const addHero = (hero) => {
     if (superTeam.map(h => h.id).includes(hero.id)) {
       alert(`${hero.name} ya esta en tu equipo`)
     }
     else {
-      setSuperTeam([...superTeam, hero])
+      if (checkMaxByAlignment(hero)) {
+        alert(`Alcanzado tope de heroes para orientacion ${hero.biography.alignment}`)
+      }
+      else {
+        if (checkMaxTeam()) {
+          alert(`Alcanzado tope de heroes.`)
+        }
+        else {
+          manageSuperTeam([...superTeam, hero])
+        }
+      }
     }
   }
 
   const removeHero = (hero) => {
     if (superTeam.map(h => h.id).includes(hero.id)) {
       if (window.confirm(`Desea quitar a ${hero.name} de su equipo?`)) {
-        setSuperTeam(superTeam.filter(heroInTeam => heroInTeam.id !== hero.id))
+        manageSuperTeam(superTeam.filter(heroInTeam => heroInTeam.id !== hero.id))
       }
     }
   }
 
+
   useEffect(() => {
 
     if (superTeam.length) {
-
-
       const arrayHeroStats = superTeam.map(hero => hero.powerstats)
       const superTeamTotalPowerStats = {}
       const AveragePowerStats = {}
@@ -58,13 +85,13 @@ export const SuperTeamManagerContext = ({ children }) => {
           }
         })
       })
-      console.log(superTeamTotalPowerStats)
 
-
-      for (let PS in superTeamTotalPowerStats) {
-        console.info(PS)
-        AveragePowerStats[PS] = (superTeamTotalPowerStats[PS] ? Math.ceil(superTeamTotalPowerStats[PS] / superTeam.length) : 0)
-
+      for (let powerstat in superTeamTotalPowerStats) {
+        AveragePowerStats[powerstat] = (
+          superTeamTotalPowerStats[powerstat]
+            ? Math.ceil(superTeamTotalPowerStats[powerstat] / superTeam.length)
+            : 0
+        )
       }
 
       manageAveragePowerStats(null)
@@ -80,6 +107,6 @@ export const SuperTeamManagerContext = ({ children }) => {
     console.table(averagePowerStats)
   }, [averagePowerStats])
 
-  return (<SuperTeamManager.Provider value={{ superTeam, addHero, removeHero, averagePowerStats }}> {children} </SuperTeamManager.Provider>
+  return (<SuperTeamManager.Provider value={{ superTeam, manageSuperTeam, checkMaxTeam, checkAlignment, checkMaxByAlignment, addHero, removeHero, averagePowerStats }}> {children} </SuperTeamManager.Provider>
   )
 }

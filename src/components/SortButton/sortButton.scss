@@ -1,0 +1,38 @@
+.seccBtnSort {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  .sortBtnSection {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  button {
+    width: 6.5rem;
+    border: 1px solid hsl(30, 95%, 62%) transparent;
+    transition: none;
+    background: hsla(130, 8%, 15%, 0.85);
+    background: linear-gradient(
+      180deg,
+      hsla(130, 8%, 15%, 0.6) 0%,
+      hsla(130, 8%, 15%, 0.7) 40%,
+      hsla(130, 8%, 15%, 0.8) 60%,
+      hsla(130, 8%, 15%, 1) 100%
+    );
+    color: #f3f6f4;
+    text-transform: capitalize;
+    font-weight: normal;
+    box-shadow: none;
+  }
+
+  button:hover {
+    border-width: 1px;
+    transform: none;
+  }
+}
+
+.currentSort {
+  border: 1px solid greenyellow;
+}

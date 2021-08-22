@@ -2,11 +2,12 @@ import React, { useContext, useState } from 'react'
 import { UserLogged } from '../../../context/UserLoggedContext'
 import { SuperTeamManager } from '../../../context/SuperTeamManagerContext'
 
+import HeroOptionsBtn from './HeroOptionsBtn/HeroOptionsBtn'
 import './searchHero.scss'
 
 const SearchHero = ({ gettingInfo, manageGettingInfo }) => {
   const { isUserLogged } = useContext(UserLogged)
-  const { superTeam, addHero, removeHero } = useContext(SuperTeamManager)
+  const { superTeam, checkMaxTeam, checkAlignment, checkMaxByAlignment, addHero, removeHero } = useContext(SuperTeamManager)
 
 
 
@@ -27,7 +28,7 @@ const SearchHero = ({ gettingInfo, manageGettingInfo }) => {
       seek = tgt.value
     }
 
-    if (seek.length > 2 || tgt.tagname === 'INPUT') {
+    if (seek.length > 1 || tgt.tagname === 'INPUT') {
       manageGettingInfo(true)
       const axios = require('axios').default
 
@@ -35,14 +36,12 @@ const SearchHero = ({ gettingInfo, manageGettingInfo }) => {
         .then(r => (r.data))
         .then(data => {
           if (data?.response === 'error') {
-            manageHerosFound({
-              error: true
-            })
+            manageHerosFound({ error: true })
           }
           else {
             manageHerosFound(data)
           }
-          console.log(data)
+          console.log(data.results[0])
           return data
         })
         .finally(() => manageGettingInfo(false))
@@ -77,7 +76,7 @@ const SearchHero = ({ gettingInfo, manageGettingInfo }) => {
                     <div className="cardsContainer">
                       {
                         (herosFound.results).map((h, index) => (
-                          <div className="heroCard" key={index} title={h.name} draggable>
+                          <div className={`heroCard ${h.biography.alignment === 'bad' ? 'badHero' : 'goodHero'}`} key={index} title={h.name} draggable>
                             {/* {h.id} */}
                             <strong>{h.name}</strong>
                             <div className='flip-card'>
@@ -89,7 +88,7 @@ const SearchHero = ({ gettingInfo, manageGettingInfo }) => {
                                 <div className="flip-card-back">
                                   <ul>
                                     {
-                                      Object.keys(h.powerstats).map((s, index) => <li key={index + h.id}> <span>{s}</span> <span>{h.powerstats[s] === 'null' ? 0 : h.powerstats[s]}</span></li>)
+                                      Object.keys(h.powerstats).map((s, index) => <li key={index + h.id}> <span className='powerStatName'>{s}</span> <span className='powerStatValue'>{h.powerstats[s] === 'null' ? 0 : h.powerstats[s]}</span></li>)
                                     }
                                   </ul>
                                 </div>
@@ -98,19 +97,14 @@ const SearchHero = ({ gettingInfo, manageGettingInfo }) => {
                             </div>
                             <div className="heroCardActions">
                               {
+
                                 superTeam.map(heroInTeam => heroInTeam.id).includes(h.id)
-                                  ? <button onClick={() => removeHero(h)} title={`Quitar ${h.name} de equipo`}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash" viewBox="0 0 16 16">
-                                      <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
-                                      <path fillRule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
-                                    </svg>
-                                  </button>
-                                  : <button onClick={() => addHero(h)} title={`Agregar ${h.name} a equipo`}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-box-arrow-in-down-right" viewBox="0 0 16 16">
-                                      <path fillRule="evenodd" d="M6.364 2.5a.5.5 0 0 1 .5-.5H13.5A1.5 1.5 0 0 1 15 3.5v10a1.5 1.5 0 0 1-1.5 1.5h-10A1.5 1.5 0 0 1 2 13.5V6.864a.5.5 0 1 1 1 0V13.5a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5v-10a.5.5 0 0 0-.5-.5H6.864a.5.5 0 0 1-.5-.5z" />
-                                      <path fillRule="evenodd" d="M11 10.5a.5.5 0 0 1-.5.5h-5a.5.5 0 0 1 0-1h3.793L1.146 1.854a.5.5 0 1 1 .708-.708L10 9.293V5.5a.5.5 0 0 1 1 0v5z" />
-                                    </svg>
-                                  </button>
+                                  ? <HeroOptionsBtn type='remove' onClick={() => removeHero(h)} title={`Quitar ${h.name} de equipo`} />
+                                  : checkMaxByAlignment(h)
+                                    ? <HeroOptionsBtn title={`Equipo alcanzo el tope para heroes con orientacion ${checkAlignment(h) === 'good' ? 'buena' : 'mala'}`} />
+                                    : checkMaxTeam()
+                                      ? <HeroOptionsBtn title={`Equipo completo'}`} />
+                                      : <HeroOptionsBtn type='add' onClick={() => addHero(h)} title={`Agregar ${h.name} a equipo`} />
                               }
                             </div>
                           </div>)

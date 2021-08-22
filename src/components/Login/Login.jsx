@@ -86,18 +86,18 @@ const Login = () => {
   }, [triedWrongCredentials])
 
   useEffect(() => {
-    const digestMessage = async (message) => {
-      const msgUint8 = new TextEncoder().encode(message);                           // encode as (utf-8) Uint8Array
-      const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);           // hash the message
-      const hashArray = Array.from(new Uint8Array(hashBuffer));                     // convert buffer to byte array
-      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join(''); // convert bytes to hex string
-      return hashHex;
-    }
-
-    const compareWithDigestHex = async (message) => {
-      const digestHex = await digestMessage(message);
-      return digestHex === 'd211897d86c8d4ccff699e0b071530ae68b3de359ec4a8801736341b5a9933f8'
-    }
+    /*     const digestMessage = async (message) => {
+          const msgUint8 = new TextEncoder().encode(message);                           // encode as (utf-8) Uint8Array
+          const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);           // hash the message
+          const hashArray = Array.from(new Uint8Array(hashBuffer));                     // convert buffer to byte array
+          const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join(''); // convert bytes to hex string
+          return hashHex;
+        }
+    
+        const compareWithDigestHex = async (message) => {
+          const digestHex = await digestMessage(message);
+          return digestHex === 'd211897d86c8d4ccff699e0b071530ae68b3de359ec4a8801736341b5a9933f8'
+        } */
 
 
     const tryRetrieve = async () => {

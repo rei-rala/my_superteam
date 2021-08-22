@@ -1,5 +1,8 @@
-$cardBorderC: #9e0005;
-$heroBorders: 2px ridge $cardBorderC;
+$cardBorderBad: rgb(158, 0, 5);
+$heroBordersBad: 3px ridge $cardBorderBad;
+
+$cardBorderGood: #209e00;
+$heroBordersGood: 3px ridge $cardBorderGood;
 
 $white: #fcfcfc;
 $black: #0e0000;
@@ -28,6 +31,7 @@ $black: #0e0000;
     justify-content: space-evenly;
     flex-wrap: wrap;
     gap: 1rem;
+    padding: 0.5rem;
 
     width: 100%;
   }
@@ -35,6 +39,14 @@ $black: #0e0000;
   h6 {
     margin-bottom: 1rem;
   }
+}
+
+.badHero {
+  border: $heroBordersBad;
+}
+
+.goodHero {
+  border: $heroBordersGood;
 }
 
 .heroCard {
@@ -50,7 +62,6 @@ $black: #0e0000;
   padding: 0.5rem 0;
 
   color: $white;
-  border: $heroBorders;
   background-color: $black;
   border-radius: 1.5rem 0.2rem;
 
@@ -72,7 +83,7 @@ $black: #0e0000;
     border: none;
     cursor: pointer;
     svg {
-      fill: $cardBorderC;
+      fill: $cardBorderBad;
     }
   }
   button:hover {
