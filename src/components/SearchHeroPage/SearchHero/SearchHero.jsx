@@ -9,8 +9,6 @@ const SearchHero = ({ gettingInfo, manageGettingInfo }) => {
   const { isUserLogged } = useContext(UserLogged)
   const { superTeam, checkMaxTeam, checkAlignment, checkMaxByAlignment, addHero, removeHero } = useContext(SuperTeamManager)
 
-
-
   const [herosFound, setHerosFound] = useState([])
   const manageHerosFound = (arr) => setHerosFound(arr)
 
@@ -24,11 +22,11 @@ const SearchHero = ({ gettingInfo, manageGettingInfo }) => {
     if (tgt.tagName === 'FORM') {
       seek = tgt.seekHero.value
     }
-    else {
+    else if (tgt.tagName === 'INPUT') {
       seek = tgt.value
     }
 
-    if (seek.length > 1 || tgt.tagname === 'INPUT') {
+    if ((tgt.tagname === 'FORM' || seek.length > 1) || tgt.tagname === 'INPUT') {
       manageGettingInfo(true)
       const axios = require('axios').default
 
@@ -41,7 +39,6 @@ const SearchHero = ({ gettingInfo, manageGettingInfo }) => {
           else {
             manageHerosFound(data)
           }
-          console.log(data.results[0])
           return data
         })
         .finally(() => manageGettingInfo(false))
@@ -75,8 +72,8 @@ const SearchHero = ({ gettingInfo, manageGettingInfo }) => {
                     <h6>Busqueda: {herosFound['results-for'].toUpperCase()} - {herosFound.results.length} {herosFound.results.length > 1 ? 'resultados' : 'resultado'}</h6>
                     <div className="cardsContainer">
                       {
-                        (herosFound.results).map((h, index) => (
-                          <div className={`heroCard ${h.biography.alignment === 'bad' ? 'badHero' : 'goodHero'}`} key={index} title={h.name} draggable>
+                        (herosFound.results).map(h => (
+                          <div className={`heroCard ${h.biography.alignment === 'bad' ? 'badHero' : 'goodHero'}`} key={h.id} title={h.name} draggable>
                             {/* {h.id} */}
                             <strong>{h.name}</strong>
                             <div className='flip-card'>

@@ -1,8 +1,8 @@
-$cardBorderBad: rgb(158, 0, 5);
-$heroBordersBad: 3px ridge $cardBorderBad;
+$cardColorBad: hsla(358, 100%, 31%, 0.3);
+$heroBordersBad: 3px ridge $cardColorBad;
 
-$cardBorderGood: #209e00;
-$heroBordersGood: 3px ridge $cardBorderGood;
+$cardColorGood: hsla(108, 100%, 31%, 0.3);
+$heroBordersGood: 3px ridge $cardColorGood;
 
 $white: #fcfcfc;
 $black: #0e0000;
@@ -30,10 +30,11 @@ $black: #0e0000;
     display: flex;
     justify-content: space-evenly;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 2rem;
     padding: 0.5rem;
 
     width: 100%;
+    transition: all 1s;
   }
 
   h6 {
@@ -43,10 +44,12 @@ $black: #0e0000;
 
 .badHero {
   border: $heroBordersBad;
+  background: $cardColorBad;
 }
 
 .goodHero {
   border: $heroBordersGood;
+  background: $cardColorGood;
 }
 
 .heroCard {
@@ -56,22 +59,31 @@ $black: #0e0000;
   align-items: center;
   gap: 0.3rem;
 
-  width: 12rem;
-  height: 20rem;
+  width: 18rem;
+  height: 30rem;
 
   padding: 0.5rem 0;
 
   color: $white;
-  background-color: $black;
   border-radius: 1.5rem 0.2rem;
 
   cursor: default;
   overflow: hidden;
   animation: 0.25s showFirst 1;
 
+  box-shadow: 0 10px 30px 10px rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-radius: 2.5rem 0.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
   img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     object-fit: cover;
-    width: 100%;
+    height: 100%;
   }
 
   button,
@@ -83,14 +95,11 @@ $black: #0e0000;
     border: none;
     cursor: pointer;
     svg {
-      fill: $cardBorderBad;
+      fill: $white;
     }
   }
   button:hover {
     transform: scale(1.1);
-    svg {
-      fill: $white;
-    }
   }
 
   li {
@@ -111,6 +120,9 @@ $black: #0e0000;
     width: 100%;
     height: 100%;
     perspective: 1000px;
+    -ms-perspective: 1000px;
+    -moz-perspective: 1000px;
+    -webkit-perspective: 1000px;
   }
 
   .flip-card-inner {
@@ -118,8 +130,9 @@ $black: #0e0000;
     width: 100%;
     height: 100%;
     text-align: center;
-    transition: transform 0.8s;
+    transition: transform 0.7s ease-out;
     transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
   }
 
   .flip-card:hover .flip-card-inner {
@@ -132,8 +145,10 @@ $black: #0e0000;
     position: absolute;
     width: 100%;
     height: 100%;
-    -webkit-backface-visibility: hidden; /* Safari */
+
     backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
 
   .flip-card-back {
@@ -151,5 +166,19 @@ $black: #0e0000;
   }
   to {
     transform: scale(1);
+  }
+}
+
+@media screen and (orientation: landscape) and (max-width: 768px) {
+  .heroCard {
+    max-width: 50%;
+    height: 15rem;
+  }
+}
+
+@media screen and (orientation: portrait) and (max-width: 768px) {
+  .heroCard {
+    max-width: 8rem;
+    height: 18rem;
   }
 }

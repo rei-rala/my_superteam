@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { UserLogged } from '../../context/UserLoggedContext'
 import { SuperTeamManager } from '../../context/SuperTeamManagerContext'
 
@@ -6,21 +6,12 @@ import SortButton from '../SortButton/SortButton'
 
 const HomePage = () => {
 
-  const { superTeam, manageSuperTeam, removeHero, averagePowerStats } = useContext(SuperTeamManager)
+  const { superTeam, manageSuperTeam, removeHero, averagePowerStats, heroSortingTerms } = useContext(SuperTeamManager)
   const { isUserLogged, usernameLogged } = useContext(UserLogged)
 
   const [refreshesBySort, setRefreshesBySort] = useState(0);
   const toggleRefresh = () => setRefreshesBySort(refreshesBySort + 1)
 
-  useEffect(() => {
-    const team = superTeam
-
-    if (superTeam) {
-      manageSuperTeam([])
-      manageSuperTeam(team)
-    }
-  }, [refreshesBySort, manageSuperTeam, superTeam])
-  !superTeam[0] ?? console.log(Object.keys((superTeam[0])))
   return (
     <section className="home">
       {
@@ -28,9 +19,12 @@ const HomePage = () => {
           ? <>
             <h2>SuperTeam de {usernameLogged}</h2>
             <hr />
-            <SortButton toSort={superTeam} displayFunction={() => { }} varUseEffect={toggleRefresh} arraySortingTerms={['id', 'name', ['biography']['alignment']]} />
-            <>
-
+            {
+              superTeam.length
+                ? <SortButton toSort={superTeam} displayFunction={manageSuperTeam} varUseEffect={toggleRefresh} arraySortingTerms={heroSortingTerms} />
+                : null
+            }
+            <div className="mySuperTeam">
               {
                 averagePowerStats
                   ? <ul>
@@ -45,7 +39,7 @@ const HomePage = () => {
               <hr />
               {
                 superTeam.length
-                  ? superTeam.map(h => <div className="mySuperTeam" key={h.id}>
+                  ? superTeam.map(h => <div className="heroInTeam" key={h.id}>
                     <span> {h.name}</span>
                     <ul>
                       {
@@ -55,10 +49,9 @@ const HomePage = () => {
                     <button onClick={() => removeHero(h)}>Quitar {h.name}</button>
                   </div>
                   )
-
                   : 'Agrega heroes'
               }
-            </>
+            </div>
           </>
           : null
       }

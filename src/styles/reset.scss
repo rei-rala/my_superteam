@@ -1,11 +1,31 @@
+@font-face {
+  font-family: "Thunder Lord";
+  src: url("./fonts/Thunder\ Lord.ttf");
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-ul {
-  list-style-type: none;
+body {
+  color: white;
+  background-color: black;
+  background-image: url(https://github.com/rei-rala/calcul_v1/blob/main/imgs/bkg_img.jpg?raw=true);
+  background-repeat: repeat;
+  background-size: 250px;
+  overflow-y: scroll;
+
+  padding-top: 4rem;
+}
+
+.header {
+  .logo {
+    font-family: "Thunder Lord", cursive;
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
 }
 
 section {
@@ -14,4 +34,23 @@ section {
 
 .powerStatName {
   text-transform: capitalize;
+}
+
+button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: all 0.15s;
+  cursor: pointer;
+}
+
+ul {
+  list-style-type: none;
+}
+
+@media screen and (max-width: 768px) {
+  body {
+    background-size: 200px;
+  }
 }

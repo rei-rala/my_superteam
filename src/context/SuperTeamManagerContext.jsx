@@ -12,22 +12,22 @@ export const SuperTeamManagerContext = ({ children }) => {
   const [averagePowerStats, setAveragePowerStats] = useState(null)
   const manageAveragePowerStats = (powerStatsObject) => setAveragePowerStats(powerStatsObject)
 
-  
-    const checkMaxTeam = () => {
-      return superTeam
-        ? superTeam.lenght >= 6 ?
-          true
-          : false
+
+  const checkMaxTeam = () => {
+    return superTeam
+      ? superTeam.lenght >= 6 ?
+        true
         : false
-    }
+      : false
+  }
 
   const checkAlignment = (hero) => {
     return hero.biography.alignment
-  }  
+  }
 
   const checkMaxByAlignment = (hero) => {
     return superTeam.filter(heroInTeam => checkAlignment(heroInTeam) === checkAlignment(hero)).length >= 3
-  }    
+  }
 
   const addHero = (hero) => {
     if (superTeam.map(h => h.id).includes(hero.id)) {
@@ -107,6 +107,16 @@ export const SuperTeamManagerContext = ({ children }) => {
     console.table(averagePowerStats)
   }, [averagePowerStats])
 
-  return (<SuperTeamManager.Provider value={{ superTeam, manageSuperTeam, checkMaxTeam, checkAlignment, checkMaxByAlignment, addHero, removeHero, averagePowerStats }}> {children} </SuperTeamManager.Provider>
+  const [heroSortingTerms, setHeroSortingTerms] = useState(null)
+  useEffect(() => {
+    if (superTeam.length > 1) {
+      const firstHeroStats = Object.keys((superTeam[0]).powerstats).map(s => `powerstats.${s}`)
+      const customSortingTerms = ['name', 'biography.alignment', ...firstHeroStats]
+
+      setHeroSortingTerms(customSortingTerms)
+    }
+  }, [superTeam])
+
+  return (<SuperTeamManager.Provider value={{ superTeam, heroSortingTerms, manageSuperTeam, checkMaxTeam, checkAlignment, checkMaxByAlignment, addHero, removeHero, averagePowerStats }}> {children} </SuperTeamManager.Provider>
   )
 }
