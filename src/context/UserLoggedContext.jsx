@@ -20,8 +20,6 @@ export const UserLoggedContext = ({ children }) => {
   const manageUsernameLogged = (username) => setUsernameLogged(username)
 
 
-  const axios = require('axios').default
-
   const tryLogIn = async (ev) => {
     ev.preventDefault();
     ev.stopPropagation();
@@ -38,46 +36,80 @@ export const UserLoggedContext = ({ children }) => {
   }
 
   useEffect(() => {
-    const CancelToken = axios.CancelToken;
-    const source = CancelToken.source()
 
-    const logIn = async () => {
+    const logIn = async ({ email, password }) => {
       manageLoggingIn(true)
 
-      //const process =
-      axios({
-        method: 'post',
-        url: 'http://challenge-react.alkemy.org/',
-        data: userInfo
-      }, {
-        cancelToken: source.token,
-      })
+
+      const digestMessage = async (message) => {
+        const msgUint8 = new TextEncoder().encode(message);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        return hashHex;
+      }
+
+      const compareWithDigestHex = async (emailInput, passwordInput) => {
+        const digestMail = await digestMessage(emailInput);
+        const digestPass = await digestMessage(passwordInput);
+
+
+        const sessionData = {
+          mDig: digestMail,
+          mv: (
+            digestMail === '9bc5e0d6ba78769e7aea29c57d9315348a6d879ac22a17b68cd14fe00e1f1478'
+            || digestMail === '97d0f744548aa446bba6cbb198d375bd8b224429f59093016b7fa90d1b3febda'
+          )
+        }
+
+        return new Promise((resolve, reject) => {
+          try {
+            if (sessionData.mv) {
+              sessionData.pDig = digestPass
+              sessionData.mp = (
+                digestPass === '275976081ce1abf67779eb3c388b5e14531082e52137502e264776e1a6a11595'
+                || digestPass === '76cb73cd1829daa4fa75788e27a756600b5f62ab03f2a9bd15d4a56644a22b78'
+              )
+
+              if (sessionData.mp) {
+                resolve({ res: 'ok', token: 1234567 })
+              }
+              else {
+                throw new Error('nope')
+              }
+            }
+            else {
+              throw new Error('nope')
+            }
+          }
+          catch (err) {
+            reject('Bad credentials')
+          }
+        })
+      }
+
+      compareWithDigestHex(email, password)
         .then(r => {
-          if (r.status === 200) {
-            console.log(`Iniciado con exito. Codigo ${r.status}`)
-            localStorage.setItem('superteam_access', r.data.token)
+          if (r.res === 'ok') {
+            console.log(`Iniciado con exito. Codigo ${r.res}`)
+            localStorage.setItem('superteam_access', r.token)
             localStorage.setItem('superteam_email', userInfo.email)
             manageUsernameLogged(userInfo.email)
-            return true
           }
         })
         .catch(err => {
           manageTriedWrongCredentials(true)
         })
-        .finally(validLogIn => {
+        .finally(() => {
           manageLoggingIn(false)
-          if (validLogIn) {
+          if (userInfo.email && localStorage.getItem('superteam_access') === 'ok') {
             manageUserLogged(true)
           }
         })
     }
 
-    if (loggingIn) { logIn() }
-
-    return () => {
-      source.cancel('Cancelado por usuario')
-    }
-  })
+    if (loggingIn) { logIn(userInfo) }
+  }, [loggingIn, userInfo])
 
   useEffect(() => {
     if (triedWrongCredentials) {
@@ -92,19 +124,6 @@ export const UserLoggedContext = ({ children }) => {
   }, [triedWrongCredentials])
 
   useEffect(() => {
-    /*     const digestMessage = async (message) => {
-          const msgUint8 = new TextEncoder().encode(message);                           // encode as (utf-8) Uint8Array
-          const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);           // hash the message
-          const hashArray = Array.from(new Uint8Array(hashBuffer));                     // convert buffer to byte array
-          const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join(''); // convert bytes to hex string
-          return hashHex;
-        }
-    
-        const compareWithDigestHex = async (message) => {
-          const digestHex = await digestMessage(message);
-          return digestHex === 'd211897d86c8d4ccff699e0b071530ae68b3de359ec4a8801736341b5a9933f8'
-        } */
-
 
     const tryRetrieve = async () => {
       const sessionInLocalStorage = {
@@ -113,9 +132,6 @@ export const UserLoggedContext = ({ children }) => {
       }
 
       if (sessionInLocalStorage.access && sessionInLocalStorage.access !== undefined) {
-        /*         console.table(sessionInLocalStorage)
-                const compare = await compareWithDigestHex(sessionInLocalStorage.access)
-                if (compare) { */
         manageUserLogged(true)
         manageUsernameLogged(sessionInLocalStorage.email)
 
