@@ -1,5 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 
+import { digestMessage } from '../Helpers/Helpers.js';
+
 export const UserLogged = createContext();
 
 export const UserLoggedContext = ({ children }) => {
@@ -39,15 +41,6 @@ export const UserLoggedContext = ({ children }) => {
 
     const logIn = async ({ email, password }) => {
       manageLoggingIn(true)
-
-
-      const digestMessage = async (message) => {
-        const msgUint8 = new TextEncoder().encode(message);
-        const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        return hashHex;
-      }
 
       const compareWithDigestHex = async (emailInput, passwordInput) => {
         const digestMail = await digestMessage(emailInput);
@@ -91,7 +84,7 @@ export const UserLoggedContext = ({ children }) => {
       compareWithDigestHex(email, password)
         .then(r => {
           if (r.res === 'ok') {
-            console.log(`Iniciado con exito. Codigo ${r.res}`)
+
             localStorage.setItem('superteam_access', r.token)
             localStorage.setItem('superteam_email', userInfo.email)
             manageUsernameLogged(userInfo.email)
@@ -134,8 +127,6 @@ export const UserLoggedContext = ({ children }) => {
       if (sessionInLocalStorage.access && sessionInLocalStorage.access !== undefined) {
         manageUserLogged(true)
         manageUsernameLogged(sessionInLocalStorage.email)
-
-        console.log(`Logged`)
       }
     }
     tryRetrieve()

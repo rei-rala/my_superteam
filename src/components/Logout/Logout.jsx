@@ -18,8 +18,14 @@ const LogOut = () => {
   }
 
   return (
-    <div className='userboard'>
-      <span>{usernameLogged.toUpperCase()}</span>
+    <div className='userboard' title={`Sesion de ${usernameLogged}`}>
+      <span>{
+        (
+          usernameLogged.split('@')[0].length > 12
+            ? usernameLogged.split('@')[0].substr(0, 9) + '...'
+            : usernameLogged.split('@')[0]
+        ).toUpperCase()
+      }</span>
       <button onClick={loggingOut}>Cerrar Sesion</button>
     </div>
   )
