@@ -3,8 +3,6 @@ import './styles/reset.scss';
 
 import { Redirect, Route } from 'react-router';
 
-/* import { ThemeContext } from './context/ThemeContext';
-import ThemeToggler from './components/ThemeToggler/ThemeToggler'; */
 
 import { UserLogged } from './context/UserLoggedContext';
 import { SuperTeamManagerContext } from './context/SuperTeamManagerContext';
@@ -20,34 +18,43 @@ function App() {
 
   return (
     <>
-      <Header />
       {
+
         isUserLogged
           ? <Redirect to='/test' />
           : <Redirect to='/login' />
       }
 
+      <Route exact path='/'>
+        {
+          isUserLogged
+            ? <Redirect to='/test' />
+            : <Redirect to='/login' />
+        }
+      </Route>
 
-      {
-        <>
-          <Route exact path='/login'>
-            <Login />
-          </Route>
 
-          <SuperTeamManagerContext>
-            <Route exact path='/test'>
-              <HomePage />
-              <SearchHeroPage />
-            </Route>
-            <Route exact path='/home'>
-              <HomePage />
-            </Route>
-            <Route exact path='/search'>
-              <SearchHeroPage />
-            </Route>
-          </SuperTeamManagerContext>
-        </>
-      }
+      <Route exact path='/login'>
+        <Login />
+      </Route>
+
+      <SuperTeamManagerContext>
+        <Header />
+
+        <Route exact path='/test'>
+          <HomePage />
+          <SearchHeroPage />
+        </Route>
+
+        <Route exact path='/home'>
+          <HomePage />
+        </Route>
+
+        <Route exact path='/search'>
+          <SearchHeroPage />
+        </Route>
+
+      </SuperTeamManagerContext>
     </>
   );
 }

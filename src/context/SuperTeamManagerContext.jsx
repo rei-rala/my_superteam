@@ -1,21 +1,22 @@
 import React, { createContext, useEffect, useState } from 'react';
-//import { UserLogged } from './UserLoggedContext';
 
 export const SuperTeamManager = createContext();
 
 export const SuperTeamManagerContext = ({ children }) => {
-  //const { isUserLogged } = useContext(UserLogged)
 
   const [superTeam, setSuperTeam] = useState([])
   const manageSuperTeam = (team) => setSuperTeam(team)
 
+  const [totalPowerStats, setTotalPowerStats] = useState(null)
   const [averagePowerStats, setAveragePowerStats] = useState(null)
   const manageAveragePowerStats = (powerStatsObject) => setAveragePowerStats(powerStatsObject)
+  const manageTotalPowerStats = (powerStatsObject) => setTotalPowerStats(powerStatsObject)
 
+  const [heroSortingTerms, setHeroSortingTerms] = useState(null)
 
   const checkMaxTeam = () => {
     return superTeam
-      ? superTeam.lenght >= 6 ?
+      ? superTeam.length >= 6 ?
         true
         : false
       : false
@@ -58,8 +59,11 @@ export const SuperTeamManagerContext = ({ children }) => {
 
 
   useEffect(() => {
-
     if (superTeam.length) {
+      const firstHeroStats = Object.keys((superTeam[0]).powerstats).map(s => `powerstats.${s}`)
+      const customSortingTerms = ['name', 'biography.alignment', ...firstHeroStats]
+
+      setHeroSortingTerms(customSortingTerms)
       const arrayHeroStats = superTeam.map(hero => hero.powerstats)
       const superTeamTotalPowerStats = {}
       const AveragePowerStats = {}
@@ -86,6 +90,8 @@ export const SuperTeamManagerContext = ({ children }) => {
         })
       })
 
+      manageTotalPowerStats(superTeamTotalPowerStats)
+
       for (let powerstat in superTeamTotalPowerStats) {
         AveragePowerStats[powerstat] = (
           superTeamTotalPowerStats[powerstat]
@@ -95,28 +101,15 @@ export const SuperTeamManagerContext = ({ children }) => {
       }
 
       manageAveragePowerStats(null)
-      manageAveragePowerStats(AveragePowerStats)
-
+      manageAveragePowerStats(Object.fromEntries(Object.entries(AveragePowerStats).sort((a, b) => a[1] > b[1] ? -1 : 1)))
     }
     else {
       manageAveragePowerStats(null)
     }
+    localStorage.setItem('superTeam', JSON.stringify(superTeam))
   }, [superTeam])
 
-  useState(() => {
-    console.table(averagePowerStats)
-  }, [averagePowerStats])
 
-  const [heroSortingTerms, setHeroSortingTerms] = useState(null)
-  useEffect(() => {
-    if (superTeam.length > 1) {
-      const firstHeroStats = Object.keys((superTeam[0]).powerstats).map(s => `powerstats.${s}`)
-      const customSortingTerms = ['name', 'biography.alignment', ...firstHeroStats]
-
-      setHeroSortingTerms(customSortingTerms)
-    }
-  }, [superTeam])
-
-  return (<SuperTeamManager.Provider value={{ superTeam, heroSortingTerms, manageSuperTeam, checkMaxTeam, checkAlignment, checkMaxByAlignment, addHero, removeHero, averagePowerStats }}> {children} </SuperTeamManager.Provider>
+  return (<SuperTeamManager.Provider value={{ superTeam, heroSortingTerms, manageSuperTeam, checkMaxTeam, checkAlignment, checkMaxByAlignment, addHero, removeHero, totalPowerStats, averagePowerStats }}> {children} </SuperTeamManager.Provider>
   )
 }

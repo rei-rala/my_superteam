@@ -1,20 +1,91 @@
-$cardColorBad: hsla(358, 100%, 31%, 0.3);
+$cardColorBad: hsla(358, 100%, 31%, 0.45);
 $heroBordersBad: 3px ridge $cardColorBad;
 
-$cardColorGood: hsla(108, 100%, 31%, 0.3);
+$cardColorGood: hsla(108, 100%, 31%, 0.45);
 $heroBordersGood: 3px ridge $cardColorGood;
 
 $white: #fcfcfc;
 $black: #0e0000;
 
+@keyframes searchIn {
+  from {
+    width: 3rem;
+    height: 3rem;
+  }
+  to {
+    width: 30rem;
+    height: 5rem;
+  }
+}
+
+@keyframes showFirst {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
 .searchHero {
+  text-align: center;
+  width: 100%;
+
   form {
+    position: fixed;
+    transform: translate(-50%, -50%);
+
     display: flex;
     justify-content: center;
     align-items: center;
-    column-gap: 0.5rem;
+    gap: 0.5rem;
 
-    width: 100%;
+    border: 1px solid white;
+    border-radius: 1rem;
+    background-color: black;
+    padding: 0.25rem;
+
+    transition: all 1s;
+    z-index: 9;
+
+    .searchOptions {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      &:not(.showSearchMenu) {
+        width: 10rem;
+      }
+    }
+
+    &.searchMenuOff,
+    &.searchMenuOn {
+      overflow: hidden;
+    }
+
+    &.searchMenuOff {
+      left: calc(95vw - 1rem);
+      top: calc(95vh - 1rem);
+      width: 3rem;
+      animation: 0.5s 1 searchIn reverse;
+
+      label,
+      input,
+      .searchOptions > *:not(.showSearchMenu) {
+        display: none;
+      }
+    }
+    &.searchMenuOn {
+      left: 50%;
+      top: 50vh;
+      width: 30rem;
+      height: 5rem;
+      padding: 0.5rem;
+      animation: 0.5s 1 searchIn;
+
+      .searchOptions > .showSearchMenu {
+        display: none;
+      }
+    }
   }
 }
 
@@ -24,8 +95,6 @@ $black: #0e0000;
 }
 
 .foundContainer {
-  text-align: center;
-
   .cardsContainer {
     display: flex;
     justify-content: space-evenly;
@@ -65,17 +134,12 @@ $black: #0e0000;
   padding: 0.5rem 0;
 
   color: $white;
-  border-radius: 1.5rem 0.2rem;
+  border-radius: 3rem 1rem;
 
   cursor: default;
   overflow: hidden;
   animation: 0.25s showFirst 1;
-
-  box-shadow: 0 10px 30px 10px rgba(31, 38, 135, 0.37);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border-radius: 2.5rem 0.25rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 1s;
 
   img {
     position: absolute;
@@ -84,19 +148,13 @@ $black: #0e0000;
     transform: translate(-50%, -50%);
     object-fit: cover;
     height: 100%;
+    cursor: pointer;
   }
 
-  button,
-  button svg {
-    transition: all 0.5s;
-  }
   button {
     background-color: transparent;
     border: none;
     cursor: pointer;
-    svg {
-      fill: $white;
-    }
   }
   button:hover {
     transform: scale(1.1);
@@ -133,9 +191,11 @@ $black: #0e0000;
     transition: transform 0.7s ease-out;
     transform-style: preserve-3d;
     -webkit-transform-style: preserve-3d;
+    background-color: hsl(0, 100%, 3%);
   }
 
-  .flip-card:hover .flip-card-inner {
+  .flip-card:active .flip-card-inner,
+  .flip-card:focus .flip-card-inner {
     transform: rotateY(180deg);
   }
 
@@ -155,17 +215,8 @@ $black: #0e0000;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: hsla(0, 100%, 3%, 0.85);
+    background-color: hsla(0, 100%, 3%, 0.5);
     transform: rotateY(180deg);
-  }
-}
-
-@keyframes showFirst {
-  from {
-    transform: scale(0);
-  }
-  to {
-    transform: scale(1);
   }
 }
 
@@ -176,9 +227,22 @@ $black: #0e0000;
   }
 }
 
-@media screen and (orientation: portrait) and (max-width: 768px) {
+@media only screen and (orientation: portrait) and (max-width: 768px) {
   .heroCard {
     max-width: 8rem;
     height: 18rem;
+  }
+  .flip-card:hover .flip-card-inner {
+    transform: rotateY(180deg);
+  }
+
+  .searchMenuOn {
+    display: flex;
+    flex-direction: column;
+    height: fit-content !important;
+    width: fit-content !important;
+    .searchOptions {
+      width: 100% !important;
+    }
   }
 }

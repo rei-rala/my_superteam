@@ -9,6 +9,7 @@ const Login = () => {
   return (
     <section className='logInSection'>
 
+        {triedWrongCredentials ? <h2>Credenciales incorrectas</h2> : null}
       <form onSubmit={tryLogIn}>
 
         <div className="loginGroup">
@@ -21,10 +22,9 @@ const Login = () => {
           <input type="password" id='userPassword' name='userPassword' required />
         </div>
 
-        {loggingIn || triedWrongCredentials ? <button disabled>Iniciar</button> : <button>Iniciar</button>}
+        {loggingIn || triedWrongCredentials ? <button disabled className='workingButton'>Espere un momento</button> : <button>Iniciar</button>}
       </form>
 
-      {triedWrongCredentials ? 'Credenciales incorrectas' : null}
     </section>
   )
 }

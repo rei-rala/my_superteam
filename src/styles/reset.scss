@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap");
+
 @font-face {
   font-family: "Thunder Lord";
   src: url("./fonts/Thunder\ Lord.ttf");
@@ -7,17 +9,30 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+}
+
+span,
+strong,
+label,
+button,
+a {
+  white-space: nowrap;
 }
 
 body {
   color: white;
-  background-color: black;
-  background-image: url(https://github.com/rei-rala/calcul_v1/blob/main/imgs/bkg_img.jpg?raw=true);
-  background-repeat: repeat;
-  background-size: 250px;
-  overflow-y: scroll;
+  width: 100%;
+  height: 100%;
+  padding-top: 5rem;
 
-  padding-top: 4rem;
+  background: url("./bkg.webp") no-repeat center center fixed;
+  background-size: 100% 100%;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+
+  overflow: hidden scroll;
 }
 
 .header {
@@ -36,21 +51,44 @@ section {
   text-transform: capitalize;
 }
 
+label,
+input,
+button:not(.userboard button, .heroCardActions button) {
+  padding: 0.5rem;
+  border-radius: 10px;
+}
+
 button {
   display: flex;
   align-items: center;
   justify-content: center;
 
-  transition: all 0.15s;
+  background: hsl(0, 0%, 0%);
+  color: hsl(0, 0%, 100%);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+
+  transition: all 0.5s;
   cursor: pointer;
+}
+
+button:hover,
+.workingButton {
+  background: rgba(255, 255, 255, 0.9);
+  color: hsl(0, 0%, 0%);
+}
+
+a {
+  text-decoration: none;
+  color: white;
 }
 
 ul {
   list-style-type: none;
 }
 
-@media screen and (max-width: 768px) {
-  body {
-    background-size: 200px;
-  }
+.heroCard:hover {
+  transform: scale(1.05);
 }

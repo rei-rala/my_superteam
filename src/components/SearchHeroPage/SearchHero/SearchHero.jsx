@@ -12,6 +12,13 @@ const SearchHero = ({ gettingInfo, manageGettingInfo }) => {
   const [herosFound, setHerosFound] = useState([])
   const manageHerosFound = (arr) => setHerosFound(arr)
 
+  const [searchMenuActive, setSearchMenuActive] = useState(true)
+  const toggleSearchMenu = (e) => {
+    e.preventDefault()
+    setSearchMenuActive(!searchMenuActive)
+  }
+
+
   const searchHero = async (ev) => {
     ev.preventDefault()
     ev.stopPropagation();
@@ -26,7 +33,9 @@ const SearchHero = ({ gettingInfo, manageGettingInfo }) => {
       seek = tgt.value
     }
 
-    if ((tgt.tagname === 'FORM' || seek.length > 1) || tgt.tagname === 'INPUT') {
+    seek = seek.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')
+
+    if (((tgt.tagname === 'FORM' || seek.length > 1) || tgt.tagname === 'INPUT')) {
       manageGettingInfo(true)
       const axios = require('axios').default
 
@@ -47,15 +56,24 @@ const SearchHero = ({ gettingInfo, manageGettingInfo }) => {
 
 
 
+
   return (
     <section className='searchHero'>
       {
         isUserLogged
           ? <>
-            <form onSubmit={searchHero}>
-              <label htmlFor='heroSearchInput'>Busqueda</label>
-              <input onChange={searchHero} type="text" id='heroSearchInput' name='seekHero' required />
-              <button > Obtener</ button >
+            <form onSubmit={searchHero} className={searchMenuActive ? 'searchMenuOn' : 'searchMenuOff'}>
+              <label htmlFor='heroSearchInput'>Nombre de heroe</label>
+              <input onChange={searchHero} type="text" id='heroSearchInput' name='seekHero' maxLength={15} required />
+              <div className="searchOptions">
+                {gettingInfo ? <button className='workingButton'> Cargando</ button > : <button> Busqueda</ button >}
+                {herosFound.response === 'success' ? <button onClick={toggleSearchMenu} className='hideSearchMenu'> Ocultar</ button > : null}
+                <button onClick={toggleSearchMenu} className='showSearchMenu'>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                  </svg>
+                </button>
+              </div>
             </form >
 
             <div className='foundContainer'>
@@ -94,18 +112,16 @@ const SearchHero = ({ gettingInfo, manageGettingInfo }) => {
                             </div>
                             <div className="heroCardActions">
                               {
-
                                 superTeam.map(heroInTeam => heroInTeam.id).includes(h.id)
                                   ? <HeroOptionsBtn type='remove' onClick={() => removeHero(h)} title={`Quitar ${h.name} de equipo`} />
-                                  : checkMaxByAlignment(h)
-                                    ? <HeroOptionsBtn title={`Equipo alcanzo el tope para heroes con orientacion ${checkAlignment(h) === 'good' ? 'buena' : 'mala'}`} />
-                                    : checkMaxTeam()
-                                      ? <HeroOptionsBtn title={`Equipo completo'}`} />
+                                  : checkMaxTeam()
+                                    ? <HeroOptionsBtn title={`Tu equipo esta completo`} />
+                                    : checkMaxByAlignment(h)
+                                      ? <HeroOptionsBtn title={`Tu equipo alcanzo el tope para heroes con orientacion ${checkAlignment(h) === 'good' ? 'buena' : 'mala'}`} />
                                       : <HeroOptionsBtn type='add' onClick={() => addHero(h)} title={`Agregar ${h.name} a equipo`} />
                               }
                             </div>
-                          </div>)
-                        )
+                          </div>))
                       }
                     </div>
                   </>

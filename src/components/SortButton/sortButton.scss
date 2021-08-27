@@ -6,8 +6,15 @@
 
   button.sortBtn {
     justify-content: space-around;
-    min-width: 6rem !important;
+    min-width: 8rem !important;
+    border-width: 2px;
 
+    &:hover {
+      border: 2px solid rgb(255, 0, 0);
+    }
+    &.currentSort {
+      border: 2px outset rgb(0, 255, 0) !important;
+    }
     span {
       text-transform: capitalize;
     }
