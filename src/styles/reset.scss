@@ -10,6 +10,7 @@
   padding: 0;
   box-sizing: border-box;
   font-family: "Roboto", sans-serif;
+  cursor: default;
 }
 
 span,
@@ -18,6 +19,18 @@ label,
 button,
 a {
   white-space: nowrap;
+}
+
+a,
+.logo,
+button,
+button * {
+  cursor: pointer;
+}
+
+input {
+  cursor: text;
+  text-align: center;
 }
 
 body {
@@ -43,17 +56,27 @@ body {
   }
 }
 
+.currentNav {
+  font-weight: bold;
+  transition: all 1s;
+  background: -webkit-linear-gradient(
+    90deg,
+    rgb(119, 255, 119) 0%,
+    rgb(255, 255, 255) 50%,
+    rgb(255, 113, 113) 100%
+  );
+  background-clip: text;
+  color: transparent;
+  -webkit-background-clip: text;
+}
+
 section {
   width: 100%;
 }
 
-.powerStatName {
-  text-transform: capitalize;
-}
-
 label,
 input,
-button:not(.userboard button, .heroCardActions button) {
+button:not(.userboard button, .heroCardActions) {
   padding: 0.5rem;
   border-radius: 10px;
 }
@@ -71,22 +94,37 @@ button {
   border: 1px solid rgba(255, 255, 255, 0.85);
 
   transition: all 0.5s;
-  cursor: pointer;
 }
 
-button:hover,
-.workingButton {
-  background: rgba(255, 255, 255, 0.9);
-  color: hsl(0, 0%, 0%);
+button:not(.heroOptionBtn) {
+  font-weight: bold;
+
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.9);
+
+  & :hover,
+  .workingButton {
+    border-color: hsl(0, 0%, 0%);
+    background: rgba(255, 255, 255, 0.9);
+    color: hsl(0, 0%, 0%);
+  }
+  &.showSearchMenu {
+    background-color: black;
+  }
 }
 
-a {
+a,
+a:visited {
   text-decoration: none;
   color: white;
 }
 
 ul {
   list-style-type: none;
+}
+
+.powerStatName {
+  text-transform: capitalize;
 }
 
 .heroCard:hover {

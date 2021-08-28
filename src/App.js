@@ -12,6 +12,7 @@ import Login from './components/Login/Login';
 
 import SearchHeroPage from './components/SearchHeroPage/SearchHeroPage';
 import HomePage from './components/HomePage/HomePage';
+import Footer from './components/Footer/Footer';
 
 function App() {
   const { isUserLogged } = useContext(UserLogged)
@@ -54,6 +55,8 @@ function App() {
           <SearchHeroPage />
         </Route>
 
+
+        <Footer />
       </SuperTeamManagerContext>
     </>
   );

@@ -220,10 +220,18 @@ $black: #0e0000;
   }
 }
 
-@media screen and (orientation: landscape) and (max-width: 768px) {
+@media screen and (orientation: landscape) and (max-width: 1024px) {
   .heroCard {
     max-width: 50%;
     height: 15rem;
+  }
+
+  .flip-card:hover .flip-card-inner {
+    transform: rotateY(180deg);
+  }
+  .searchMenuOff {
+    top: 90% !important;
+    left: 90% !important;
   }
 }
 
@@ -244,5 +252,10 @@ $black: #0e0000;
     .searchOptions {
       width: 100% !important;
     }
+  }
+
+  .searchMenuOff {
+    top: 90% !important;
+    left: 85% !important;
   }
 }

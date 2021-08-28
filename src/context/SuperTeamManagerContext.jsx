@@ -8,18 +8,19 @@ export const SuperTeamManagerContext = ({ children }) => {
   const manageSuperTeam = (team) => setSuperTeam(team)
 
   const [totalPowerStats, setTotalPowerStats] = useState(null)
-  const [averagePowerStats, setAveragePowerStats] = useState(null)
   const manageAveragePowerStats = (powerStatsObject) => setAveragePowerStats(powerStatsObject)
+
+  const [averagePowerStats, setAveragePowerStats] = useState(null)
   const manageTotalPowerStats = (powerStatsObject) => setTotalPowerStats(powerStatsObject)
 
   const [heroSortingTerms, setHeroSortingTerms] = useState(null)
 
   const checkMaxTeam = () => {
-    return superTeam
-      ? superTeam.length >= 6 ?
-        true
+    return (
+      superTeam && superTeam.length >= 6
+        ? true
         : false
-      : false
+    )
   }
 
   const checkAlignment = (hero) => {

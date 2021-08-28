@@ -1,0 +1,58 @@
+@keyframes appear {
+  from {
+    width: 0;
+  }
+  to {
+    width: 2rem;
+  }
+}
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+
+  display: flex;
+  align-items: center;
+  gap: 5%;
+
+  min-width: 6rem;
+  text-align: center;
+
+  border: 2px solid white;
+  border-bottom: none;
+  border-radius: 0.75rem 0.75rem 0 0;
+  padding: 0.5rem;
+  padding-bottom: 0.25rem;
+  background-color: #000000;
+  font-family: "Courier New", Courier, monospace;
+
+  transition: all 1s;
+
+  .group {
+    display: grid;
+    place-items: center;
+
+    animation: appear 1s 1;
+    overflow: hidden;
+
+    width: 2rem;
+    height: 2rem;
+    margin: auto;
+  }
+
+  .group[title="good"] {
+    order: 0;
+  }
+  .group[title="bad"] {
+    order: 1;
+  }
+}
+
+.hasNoTeam {
+  bottom: -5rem;
+}
+
+.hasTeam {
+  bottom: 0;
+}

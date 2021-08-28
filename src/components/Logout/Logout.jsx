@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { UserLogged } from '../../context/UserLoggedContext';
 
 const LogOut = () => {
-  const { manageUserLogged, usernameLogged, manageUsernameLogged } = useContext(UserLogged)
+  const { setUserLogged, usernameLogged, setUsernameLogged, shortUsernameLogged, setShortUsernameLogged } = useContext(UserLogged)
 
 
   const loggingOut = (ev) => {
@@ -12,14 +12,15 @@ const LogOut = () => {
     if (window.confirm(`Desea cerrar la sesion de ${usernameLogged}?`)) {
       localStorage.removeItem('superteam_access')
       localStorage.removeItem('superteam_email')
-      manageUserLogged(false)
-      manageUsernameLogged('')
+      setUserLogged(false)
+      setUsernameLogged('')
+      setShortUsernameLogged('')
     }
   }
 
   return (
-    <div className='userboard'>
-      <span>{usernameLogged.toUpperCase()}</span>
+    <div className='userboard' title={`Sesion de ${usernameLogged}`}>
+      <span>{shortUsernameLogged}</span>
       <button onClick={loggingOut}>Cerrar Sesion</button>
     </div>
   )

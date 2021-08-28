@@ -1,0 +1,114 @@
+.mySuperTeam {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 1rem;
+
+  cursor: default;
+
+  .heroInTeam {
+    max-height: 15rem;
+    width: 100%;
+    overflow: hidden;
+
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    background-color: rgba(17, 25, 40, 0.75);
+    border-radius: 12px;
+    border: 1px solid hsla(0, 0%, 100%, 0.5);
+
+    h3 {
+      background-color: rgba(220, 220, 220, 0.35);
+      border-bottom: 1px solid hsla(0, 0%, 100%, 0.5);
+    }
+  }
+}
+
+.heroInTeamBody {
+  display: flex;
+  height: 13rem;
+
+  div,
+  ul {
+    padding: 0.3rem 0;
+  }
+  p {
+    padding-bottom: 0.3rem;
+  }
+
+  img {
+    max-height: 100%;
+    max-width: 35%;
+    object-fit: cover;
+    border-right: 1px solid hsla(0, 0%, 100%, 0.5);
+  }
+
+  .heroInTeamData {
+    width: 100%;
+    ul {
+      display: flex;
+      justify-content: space-evenly;
+      width: inherit;
+      text-transform: uppercase;
+
+      border-bottom: 1px solid hsla(0, 0%, 100%, 0.5);
+
+      .desktopPS {
+        cursor: help;
+      }
+    }
+
+    .heroAlignment {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+
+      border-bottom: 1px solid hsla(0, 0%, 100%, 0.5);
+
+      &.bad strong {
+        color: red;
+      }
+      &.good strong {
+        color: lightgreen;
+      }
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+  }
+}
+
+.mobilePS {
+  display: none;
+}
+
+@media screen and (orientation: portrait) and (max-width: 768px) {
+  .heroInTeamData {
+    display: grid;
+
+    ul {
+      flex-direction: column;
+      width: fit-content;
+
+      br {
+        display: none;
+      }
+    }
+  }
+
+  .desktopPS {
+    display: none;
+  }
+  .mobilePS {
+    display: inline;
+  }
+
+  .heroInTeamActions {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+  }
+}

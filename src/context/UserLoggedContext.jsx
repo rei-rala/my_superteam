@@ -3,22 +3,15 @@ import React, { createContext, useState, useEffect } from 'react';
 export const UserLogged = createContext();
 
 export const UserLoggedContext = ({ children }) => {
-  const [isUserLogged, setIsUserLogged] = useState(false)
+  const [isUserLogged, setUserLogged] = useState(false)
 
   const [usernameLogged, setUsernameLogged] = useState('')
+  const [shortUsernameLogged, setShortUsernameLogged] = useState('')
 
   const [userInfo, setUserInfo] = useState({})
-  const manageUserInfo = (credentials) => setUserInfo(credentials)
 
   const [loggingIn, setLoggingIn] = useState(false)
-  const manageLoggingIn = (bool) => setLoggingIn(bool)
-
   const [triedWrongCredentials, setTriedWrongCredentials] = useState(false);
-  const manageTriedWrongCredentials = (bool) => setTriedWrongCredentials(bool)
-
-  const manageUserLogged = (bool) => setIsUserLogged(bool);
-  const manageUsernameLogged = (username) => setUsernameLogged(username)
-
 
   const axios = require('axios').default
 
@@ -32,8 +25,8 @@ export const UserLoggedContext = ({ children }) => {
     }
 
     if (!loggingIn) {
-      manageLoggingIn(true)
-      manageUserInfo(credentials)
+      setLoggingIn(true)
+      setUserInfo(credentials)
     }
   }
 
@@ -42,7 +35,7 @@ export const UserLoggedContext = ({ children }) => {
     const source = CancelToken.source()
 
     const logIn = async () => {
-      manageLoggingIn(true)
+      setLoggingIn(true)
 
       //const process =
       axios({
@@ -57,17 +50,26 @@ export const UserLoggedContext = ({ children }) => {
             console.log(`Iniciado con exito. Codigo ${r.status}`)
             localStorage.setItem('superteam_access', r.data.token)
             localStorage.setItem('superteam_email', userInfo.email)
-            manageUsernameLogged(userInfo.email)
+            setUsernameLogged(userInfo.email)
+
+            const shortUsername = (userInfo.email).split('@')[0]
+            setShortUsernameLogged(
+              (
+                shortUsername.length > 12
+                  ? shortUsername.slice(0, 9) + '...'
+                  : shortUsername
+              ).toUpperCase()
+            )
             return true
           }
         })
         .catch(err => {
-          manageTriedWrongCredentials(true)
+          setTriedWrongCredentials(true)
         })
         .finally(validLogIn => {
-          manageLoggingIn(false)
+          setLoggingIn(false)
           if (validLogIn) {
-            manageUserLogged(true)
+            setUserLogged(true)
           }
         })
     }
@@ -82,8 +84,8 @@ export const UserLoggedContext = ({ children }) => {
   useEffect(() => {
     if (triedWrongCredentials) {
       var reset = setTimeout(() => {
-        manageTriedWrongCredentials(false)
-        manageUserInfo({})
+        setTriedWrongCredentials(false)
+        setUserInfo({})
       }, 1500)
     }
     return () => {
@@ -116,14 +118,30 @@ export const UserLoggedContext = ({ children }) => {
         /*         console.table(sessionInLocalStorage)
                 const compare = await compareWithDigestHex(sessionInLocalStorage.access)
                 if (compare) { */
-        manageUserLogged(true)
-        manageUsernameLogged(sessionInLocalStorage.email)
+        setUserLogged(true)
+        setUsernameLogged(sessionInLocalStorage.email)
 
-        console.log(`Logged`)
+        const shortUsername = (sessionInLocalStorage.email).split('@')[0]
+        setShortUsernameLogged(
+          (
+            shortUsername.length > 12
+              ? shortUsername.slice(0, 9) + '...'
+              : shortUsername
+          ).toUpperCase()
+        )
       }
     }
     tryRetrieve()
   })
 
-  return <UserLogged.Provider value={{ isUserLogged, manageUserLogged, usernameLogged, manageUsernameLogged, tryLogIn, loggingIn, triedWrongCredentials }}> {children} </UserLogged.Provider>;
+  return <UserLogged.Provider
+    value={{
+      isUserLogged, setUserLogged,
+      usernameLogged, setUsernameLogged,
+      shortUsernameLogged, setShortUsernameLogged,
+      loggingIn, tryLogIn, triedWrongCredentials
+    }}
+  >
+    {children}
+  </UserLogged.Provider>;
 }
