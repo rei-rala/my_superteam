@@ -39,8 +39,8 @@ const TeamPowerStatInfo = ({ powerStat, powerStatAverage, powerStatTotal, isHero
     isHero
       ? <div
         className='powerStatResumeContainer'
-        title={`${powerStat} Equipo: Total  ${powerStatTotal} - Promedio ${powerStatAverage}`}
-        onClick={() => alert(`${powerStat.toUpperCase()} EQUIPO\n\tTotal  ${powerStatTotal} - Promedio ${powerStatAverage}`)}
+        title={`${powerStat}: ${powerStatTotal}`}
+        onClick={() => alert(`${powerStat.toUpperCase()} ${powerStatTotal}`)}
       >
 
         <img className='statImg' src={imgPath} alt={powerStat} />
@@ -50,8 +50,8 @@ const TeamPowerStatInfo = ({ powerStat, powerStatAverage, powerStatTotal, isHero
       </div>
       : <div
         className='powerStatResumeContainer'
-        title={`${powerStat}: ${powerStatTotal}`}
-        onClick={() => alert(`${powerStat.toUpperCase()} ${powerStatTotal}`)}
+        title={`${powerStat} Equipo: Total  ${powerStatTotal} - Promedio ${powerStatAverage}`}
+        onClick={() => alert(`${powerStat.toUpperCase()} EQUIPO\n\tTotal  ${powerStatTotal} - Promedio ${powerStatAverage}`)}
       >
 
         <img className='statImg' src={imgPath} alt={powerStat} />

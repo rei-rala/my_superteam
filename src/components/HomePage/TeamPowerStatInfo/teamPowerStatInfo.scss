@@ -8,67 +8,67 @@
 
   padding: 0.5rem;
   gap: 1rem 0.5rem;
+}
 
-  .powerStatResumeContainer {
-    position: relative;
+.powerStatResumeContainer {
+  position: relative;
 
-    display: grid;
-    place-items: center stretch;
+  display: grid;
+  place-items: center stretch;
 
-    margin: 0 0.1rem;
-    width: 6rem;
+  margin: 0 0.1rem;
+  width: 6rem;
 
-    aspect-ratio: 1;
+  aspect-ratio: 1;
 
-    text-align: center;
-    padding: 0.65rem;
-    text-transform: capitalize;
-    border-radius: 50%;
+  text-align: center;
+  padding: 0.65rem;
+  text-transform: capitalize;
+  border-radius: 50%;
 
-    backdrop-filter: blur(16px) saturate(180%);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
-    background-color: rgba(255, 255, 255, 0.5);
-    border: 1px outset white;
-    border-radius: 50%;
-    transition: all 0.25s;
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(255, 255, 255, 0.5);
+  border: 1px outset white;
+  border-radius: 50%;
+  transition: all 0.25s;
 
-    &,
-    & * {
-      cursor: pointer;
-    }
+  &,
+  & * {
+    cursor: pointer;
+  }
 
-    img,
-    .statImg {
-      width: 100%;
-      object-fit: cover;
-      fill: red;
-      margin: auto;
-    }
+  img,
+  .statImg {
+    width: 100%;
+    object-fit: cover;
+    fill: red;
+    margin: auto;
+  }
 
-    span {
-      position: absolute;
-      top: 97.5%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+  span {
+    position: absolute;
+    top: 97.5%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-      width: 2rem;
-      height: 2rem;
-      background-color: rgba(255, 255, 255, 0.85);
-      color: black;
-      border: 1px outset black;
-      font-weight: bold;
-      border-radius: 25%;
+    width: 2rem;
+    height: 2rem;
+    background-color: rgba(255, 255, 255, 0.85);
+    color: black;
+    border: 1px outset black;
+    font-weight: bold;
+    border-radius: 25%;
 
-      z-index: 9;
-    }
+    z-index: 9;
+  }
 
-    &:hover {
-      transform: scale(1.1);
-    }
+  &:hover {
+    transform: scale(1.1);
   }
 }
 

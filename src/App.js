@@ -14,7 +14,7 @@ import Footer from './components/Footer/Footer';
 
 import SearchHeroPage from './components/SearchHeroPage/SearchHeroPage';
 import HomePage from './components/HomePage/HomePage';
-import HeroDetails from './components/HeroDeails/HeroDetails';
+import HeroDetailsPage from './components/HeroDeailsPage/HeroDetailsPage';
 
 
 function App() {
@@ -22,16 +22,17 @@ function App() {
   const pageLocation = useLocation().pathname
 
 
-
   const scrollTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  useEffect(() => { scrollTop() }, [pageLocation])
+  useEffect(() => {
+    scrollTop()
+  }, [pageLocation])
 
   return (
     <>
-      <Route path='/'>
+      <Route exact path='/'>
         {
           isUserLogged
             ? <Redirect to='/home' />
@@ -41,32 +42,47 @@ function App() {
 
 
       <Route exact path='/login'>
-        <Login />
+        {
+          isUserLogged
+            ? <Redirect to='/home' />
+            : <Login />
+        }
       </Route>
 
       <SuperTeamManagerContext>
         <Header />
         <HoldSearchContext>
 
-          {
-            pageLocation.slice(0, 5) === '/hero' &&
-            <Route path='/hero/:idHero'>
-              <HeroDetails />
-            </Route>
-          }
 
+          <Route path='/hero/:idHero'>
+            <HeroDetailsPage />
+          </Route>
 
           <Route exact path='/test'>
-            <HomePage />
-            <SearchHeroPage />
+            {
+              isUserLogged
+                ? <>
+                  <HomePage />
+                  <SearchHeroPage />
+                </>
+                : <Redirect to='/login' />
+            }
           </Route>
 
           <Route exact path='/home'>
-            <HomePage />
+            {
+              isUserLogged
+                ? <HomePage />
+                : <Redirect to='/login' />
+            }
           </Route>
 
           <Route exact path='/search'>
-            <SearchHeroPage />
+            {
+              isUserLogged
+                ? <SearchHeroPage />
+                : <Redirect to='/login' />
+            }
           </Route>
 
         </HoldSearchContext>

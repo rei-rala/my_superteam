@@ -17,7 +17,7 @@ const Header = () => {
   return (
     <>
       <header className={`header ${!isUserLogged ? 'homeUnique' : ''}`}>
-        <NavLink exact to='/' activeClassName='currentNav' className='logoLink' >
+        <NavLink exact to='/home' activeClassName='currentNav' className='logoLink' >
           <div className="logo">Super<span className='logo'>/</span>Team</div>
         </NavLink>
         {

@@ -1,6 +1,8 @@
 import React, { useContext } from 'react'
 import './heroTeamCard.scss'
 
+import { Link } from 'react-router-dom'
+
 import HeroInTeamPowerStat from '../HeroInTeamPowerStat/HeroInTeamPowerStat'
 import { SuperTeamManager } from '../../../context/SuperTeamManagerContext'
 
@@ -18,7 +20,7 @@ const HeroTeamCard = ({ hero, removeHeroAction }) => {
           <HeroInTeamPowerStat hero={hero} />
 
           <div className="heroInTeamActions" >
-            <button title={`Informacion detallada sobre ${hero.name}`}>Detalles</button>
+            <Link to={`/hero/${hero.id}`}> <button title={`Informacion detallada sobre ${hero.name}`}>Detalles</button></Link>
             <button onClick={removeHeroAction} title={`Quitar a ${hero.name} de tu equipo`}>Quitar</button>
           </div>
         </div>

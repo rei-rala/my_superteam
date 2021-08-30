@@ -4,9 +4,11 @@ import { Link } from 'react-router-dom'
 import './footer.scss'
 
 import CountAlignment from './CountAlignment/CountAlignment'
+import { UserLogged } from '../../context/UserLoggedContext'
 
 const Footer = ({ pageLocation, scrollTop }) => {
   const { superTeam, isTeamMaxed } = useContext(SuperTeamManager)
+  const { isUserLogged } = useContext(UserLogged)
 
   const [footerResume, setFooterResume] = useState(null)
   const manageFooterResume = (info) => setFooterResume(info)
@@ -41,6 +43,7 @@ const Footer = ({ pageLocation, scrollTop }) => {
   }, [superTeam])
 
   return (
+    isUserLogged &&
     <>
       <div className={`countByAlignment ${superTeam.length ? 'hasTeam' : 'hasNoTeam'}`}>
         {
