@@ -1,13 +1,14 @@
 import React, { useContext, useState } from 'react'
 import { UserLogged } from '../../context/UserLoggedContext'
 import { SuperTeamManager } from '../../context/SuperTeamManagerContext'
+import { Link } from 'react-router-dom'
 
 
 import './homePage.scss'
-import PowerStatImg from './PowerStatImg/PowerStatImg'
+import TeamPowerStatInfo from './TeamPowerStatInfo/TeamPowerStatInfo'
 import SortButton from '../SortButton/SortButton'
-import { Link } from 'react-router-dom'
 
+import HeroTeamCard from './HeroTeamCard/HeroTeamCard'
 
 const HomePage = () => {
 
@@ -24,68 +25,40 @@ const HomePage = () => {
         isUserLogged
           ? <>
             <h2>SuperTeam de {usernameLogged}</h2>
-            <div className="teamAverage">
-
-              <>
-                {
-                  averagePowerStats
-                    ? <div className="resumeSection">
-
-                      <div className='tableResume'>
-
-                        <div className='rowResume'>
-                          {
-                            Object.keys(averagePowerStats).map(APS => <div key={'div' + APS} className='powerStatImgContainer'>
-                              <PowerStatImg className='statImg' powerStat={APS} />
-                            </div>)
-                          }
-                        </div>
-                        <div className='rowResume'>
-                          {
-                            Object.keys(averagePowerStats).map((APS) => <div key={'div' + APS} className='powerStatResumeContainer'>
-
-                              <span title={`Total ${APS} equipo`} onClick={() => alert(`Total ${APS} equipo`)}>
-                                {totalPowerStats[APS]}
-                              </span>
-
-                              <span title={`Promedio ${APS} equipo`} onClick={() => alert(`Promedio ${APS} equipo`)} >
-                                {averagePowerStats[APS]}
-                              </span>
-                            </div>)
-                          }
-                        </div>
-
-                      </div>
-                    </div>
-                    : null
-                }
-              </>
-            </div >
             {
-              superTeam.length
-                ? <SortButton toSort={superTeam} displayFunction={manageSuperTeam} varUseEffect={toggleRefresh} arraySortingTerms={heroSortingTerms} />
-                : null
-            }
-            <div className="mySuperTeam">
+              superTeam.length && averagePowerStats
+                ? <>
+                  <div className="resumeSection">
+                    {
+                      Object.keys(averagePowerStats).map(APS => <TeamPowerStatInfo
+                        key={'div' + APS}
+                        className='statImg'
+                        powerStat={APS}
+                        powerStatAverage={averagePowerStats[APS]}
+                        powerStatTotal={totalPowerStats[APS]}
+                      />
+                      )
+                    }
+                  </div>
+                  <div className="mySuperTeam">
+                    <SortButton toSort={superTeam} displayFunction={manageSuperTeam} varUseEffect={toggleRefresh} arraySortingTerms={heroSortingTerms} />
+                    {
+                      superTeam.map(h => <HeroTeamCard
+                        key={'myHero' + h.id}
+                        hero={h}
+                        removeHeroAction={() => removeHero(h)}
+                      />
+                      )
+                    }
+                  </div>
 
-              {
-                superTeam.length
-                  ? superTeam.map(h => <div className="heroInTeam" key={h.id}>
-                    <span> {h.name}</span>
-                    <ul>
-                      {
-                        Object.keys(h.powerstats).map((s, index) => <li key={index + 'team' + h.id}> <span className='powerStatName'>{s}</span> <span>{h.powerstats[s] === 'null' ? 0 : h.powerstats[s]}</span></li>)
-                      }
-                    </ul>
-                    <button onClick={() => removeHero(h)}>Quitar {h.name}</button>
-                  </div>
-                  )
-                  : <div className="noTeamContainer">
-                    <h5>¡No tienes un equipo activo!</h5>
-                    <p>Para agregar heroes a tu equipo, puedes hacer click <strong><Link to='/search'>aqui</Link></strong> </p>
-                  </div>
-              }
-            </div>
+                </>
+                : <div className="noTeamContainer">
+                  <h4>¡No tienes un equipo activo!</h4>
+                  <p>Para agregar heroes a tu equipo, puedes hacer click</p>
+                  <Link to='/search'><button>Aqui</button></Link>
+                </div>
+            }
           </>
           : null
       }

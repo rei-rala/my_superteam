@@ -5,22 +5,15 @@ import { digestMessage } from '../Helpers/Helpers.js';
 export const UserLogged = createContext();
 
 export const UserLoggedContext = ({ children }) => {
-  const [isUserLogged, setIsUserLogged] = useState(false)
+  const [isUserLogged, setUserLogged] = useState(false)
 
   const [usernameLogged, setUsernameLogged] = useState('')
+  const [shortUsernameLogged, setShortUsernameLogged] = useState('')
 
   const [userInfo, setUserInfo] = useState({})
-  const manageUserInfo = (credentials) => setUserInfo(credentials)
 
   const [loggingIn, setLoggingIn] = useState(false)
-  const manageLoggingIn = (bool) => setLoggingIn(bool)
-
   const [triedWrongCredentials, setTriedWrongCredentials] = useState(false);
-  const manageTriedWrongCredentials = (bool) => setTriedWrongCredentials(bool)
-
-  const manageUserLogged = (bool) => setIsUserLogged(bool);
-  const manageUsernameLogged = (username) => setUsernameLogged(username)
-
 
   const tryLogIn = async (ev) => {
     ev.preventDefault();
@@ -32,15 +25,16 @@ export const UserLoggedContext = ({ children }) => {
     }
 
     if (!loggingIn) {
-      manageLoggingIn(true)
-      manageUserInfo(credentials)
+      setLoggingIn(true)
+      setUserInfo(credentials)
     }
   }
 
   useEffect(() => {
 
     const logIn = async ({ email, password }) => {
-      manageLoggingIn(true)
+      setLoggingIn(true)
+
 
       const compareWithDigestHex = async (emailInput, passwordInput) => {
         const digestMail = await digestMessage(emailInput);
@@ -87,16 +81,16 @@ export const UserLoggedContext = ({ children }) => {
 
             localStorage.setItem('superteam_access', r.token)
             localStorage.setItem('superteam_email', userInfo.email)
-            manageUsernameLogged(userInfo.email)
+            setUsernameLogged(userInfo.email)
           }
         })
         .catch(err => {
-          manageTriedWrongCredentials(true)
+          setTriedWrongCredentials(true)
         })
         .finally(() => {
-          manageLoggingIn(false)
+          setLoggingIn(false)
           if (userInfo.email && localStorage.getItem('superteam_access') === 'ok') {
-            manageUserLogged(true)
+            setUserLogged(true)
           }
         })
     }
@@ -107,8 +101,8 @@ export const UserLoggedContext = ({ children }) => {
   useEffect(() => {
     if (triedWrongCredentials) {
       var reset = setTimeout(() => {
-        manageTriedWrongCredentials(false)
-        manageUserInfo({})
+        setTriedWrongCredentials(false)
+        setUserInfo({})
       }, 1500)
     }
     return () => {
@@ -125,12 +119,21 @@ export const UserLoggedContext = ({ children }) => {
       }
 
       if (sessionInLocalStorage.access && sessionInLocalStorage.access !== undefined) {
-        manageUserLogged(true)
-        manageUsernameLogged(sessionInLocalStorage.email)
+        setUserLogged(true)
+        setUsernameLogged(sessionInLocalStorage.email)
       }
     }
     tryRetrieve()
   })
 
-  return <UserLogged.Provider value={{ isUserLogged, manageUserLogged, usernameLogged, manageUsernameLogged, tryLogIn, loggingIn, triedWrongCredentials }}> {children} </UserLogged.Provider>;
+  return <UserLogged.Provider
+    value={{
+      isUserLogged, setUserLogged,
+      usernameLogged, setUsernameLogged,
+      shortUsernameLogged, setShortUsernameLogged,
+      loggingIn, tryLogIn, triedWrongCredentials
+    }}
+  >
+    {children}
+  </UserLogged.Provider>;
 }

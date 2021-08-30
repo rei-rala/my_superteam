@@ -1,59 +1,92 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import './styles/reset.scss';
 
-import { Redirect, Route } from 'react-router';
+import { Redirect, Route, useLocation } from 'react-router';
 
 
 import { UserLogged } from './context/UserLoggedContext';
 import { SuperTeamManagerContext } from './context/SuperTeamManagerContext';
+import { HoldSearchContext } from './context/HoldSearchContext';
 
 import Header from './components/Header/Header';
 import Login from './components/Login/Login';
+import Footer from './components/Footer/Footer';
 
 import SearchHeroPage from './components/SearchHeroPage/SearchHeroPage';
 import HomePage from './components/HomePage/HomePage';
+import HeroDetailsPage from './components/HeroDeailsPage/HeroDetailsPage';
+
 
 function App() {
   const { isUserLogged } = useContext(UserLogged)
+  const pageLocation = useLocation().pathname
+
+
+  const scrollTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollTop()
+  }, [pageLocation])
 
   return (
     <>
-      {
-
-        isUserLogged
-          ? <Redirect to='/test' />
-          : <Redirect to='/login' />
-      }
-
       <Route exact path='/'>
         {
           isUserLogged
-            ? <Redirect to='/test' />
+            ? <Redirect to='/home' />
             : <Redirect to='/login' />
         }
       </Route>
 
 
       <Route exact path='/login'>
-        <Login />
+        {
+          isUserLogged
+            ? <Redirect to='/home' />
+            : <Login />
+        }
       </Route>
 
       <SuperTeamManagerContext>
         <Header />
+        <HoldSearchContext>
 
-        <Route exact path='/test'>
-          <HomePage />
-          <SearchHeroPage />
-        </Route>
 
-        <Route exact path='/home'>
-          <HomePage />
-        </Route>
+          <Route path='/hero/:idHero'>
+            <HeroDetailsPage />
+          </Route>
 
-        <Route exact path='/search'>
-          <SearchHeroPage />
-        </Route>
+          <Route exact path='/test'>
+            {
+              isUserLogged
+                ? <>
+                  <HomePage />
+                  <SearchHeroPage />
+                </>
+                : <Redirect to='/login' />
+            }
+          </Route>
 
+          <Route exact path='/home'>
+            {
+              isUserLogged
+                ? <HomePage />
+                : <Redirect to='/login' />
+            }
+          </Route>
+
+          <Route exact path='/search'>
+            {
+              isUserLogged
+                ? <SearchHeroPage />
+                : <Redirect to='/login' />
+            }
+          </Route>
+
+        </HoldSearchContext>
+        <Footer pageLocation={pageLocation} scrollTop={scrollTop} />
       </SuperTeamManagerContext>
     </>
   );

@@ -5,7 +5,7 @@ const HeroOptionsBtn = ({ type, title, onClick }) => {
   onClick = (onClick ? onClick : () => alert(title))
 
   return (
-    <button onClick={onClick} title={title}>
+    <button className='heroOptionBtn' onClick={onClick} title={title}>
       {
         type === 'none'
           ? <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-info-square" viewBox="0 0 16 16">

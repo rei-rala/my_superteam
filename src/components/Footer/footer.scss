@@ -1,0 +1,109 @@
+@keyframes appear {
+  from {
+    width: 0;
+  }
+  to {
+    width: 2rem;
+  }
+}
+
+.countByAlignment {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+
+  &.hasNoTeam {
+    bottom: -5rem;
+  }
+
+  &.hasTeam {
+    bottom: 0;
+  }
+
+  display: flex;
+  align-items: center;
+  gap: 5%;
+
+  min-width: 6rem;
+  text-align: center;
+
+  border: 2px solid white;
+  border-bottom: none;
+  border-radius: 0.75rem 0.75rem 0 0;
+  padding: 0.5rem;
+  padding-bottom: 0.25rem;
+  background-color: #000000;
+
+  transition: all 1s;
+  z-index: 11;
+
+  .group {
+    display: grid;
+    place-items: center;
+
+    animation: appear 1s 1;
+    overflow: hidden;
+
+    width: 2rem;
+    height: 2rem;
+    margin: auto;
+
+    strong {
+      color: brown;
+    }
+  }
+
+  .group {
+    &.good {
+      order: 0;
+    }
+    &.bad {
+      order: 2;
+    }
+    &.neutral {
+      order: 1;
+    }
+  }
+}
+
+.quickAccess {
+  position: fixed;
+  bottom: -5rem;
+  left: 50%;
+  transform: translate(-50%);
+
+  display: flex;
+  justify-content: space-between;
+
+  border: 2px solid white;
+  border-bottom: none;
+  border-radius: 0.75rem 0.75rem 0 0;
+  padding: 0.5rem 0;
+  background-color: black;
+
+  transition: all 0.5s;
+
+  width: 22rem;
+
+  z-index: 10;
+
+  &.showQuickAccess {
+    bottom: 0 !important;
+  }
+  .spacer {
+    flex: 1;
+  }
+
+  .quick {
+    &1,
+    &2 {
+      flex: 1;
+      text-align: center;
+
+      span {
+        cursor: pointer;
+      }
+    }
+  }
+}

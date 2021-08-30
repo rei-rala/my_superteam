@@ -1,0 +1,77 @@
+.heroPowerStats {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  padding: 1rem 0;
+  width: 100%;
+
+  padding: 0.5rem;
+  gap: 1rem 0.5rem;
+  border-bottom: 1px solid hsla(0, 0%, 100%, 0.5);
+
+  padding-bottom: 1.5rem;
+}
+
+.heroDetailContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+
+  margin: 1%;
+  width: 98%;
+
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(17, 25, 40, 0.75);
+  border-radius: 12px;
+  border: 1px solid hsla(0, 0%, 100%, 0.5);
+
+  overflow: hidden;
+
+  h2,
+  li:not(.subList) {
+    text-align: center;
+    border-bottom: 1px solid hsla(0, 0%, 100%, 0.5);
+    border-top: 1px solid hsla(0, 0%, 100%, 0.5);
+  }
+
+  .heroDetail {
+    &_Head,
+    &_Body {
+      width: 100%;
+    }
+
+    &_Body {
+      display: flex;
+      * {
+        width: 100%;
+      }
+
+      img.heroDetailImg {
+        max-width: 45%;
+        max-height: 40rem;
+        object-fit: cover;
+        border: 1px solid hsla(0, 0%, 100%, 0.5);
+      }
+      .sideData {
+        & > ul {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-around;
+          height: 100%;
+
+          li {
+            display: inline !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 500px) {
+}

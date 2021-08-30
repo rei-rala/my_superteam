@@ -8,16 +8,19 @@
   }
 }
 
-.currentNav {
-  font-weight: bold;
-  text-decoration: underline;
-  text-decoration-color: white;
-}
-
 .homeUnique {
   .logoLink {
     margin-left: 50%;
     transform: translate(-50%);
+  }
+}
+
+div.logo:hover {
+  span {
+    background: -webkit-linear-gradient(0deg, rgb(123, 255, 0), rgb(255, 0, 0));
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
   }
 }
 
@@ -40,6 +43,10 @@
 
   .logoLink {
     transition: all 1s;
+
+    span {
+      transition: all 0.5s;
+    }
   }
 
   .navegacion {
@@ -53,6 +60,9 @@
       align-items: center;
       gap: 1rem;
       margin-right: 1rem;
+      font-weight: bold;
+
+      transition: all 0.5s;
     }
 
     .navOptionSection:hover {

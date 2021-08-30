@@ -78,8 +78,7 @@ const SortButton = ({ toSort, displayFunction, arraySortingTerms, varUseEffect }
     }
     // Si falla, entendemos que lo que le pasamos no es ordenable o fallo algo en la FN, lo imprimimos en consola
     catch (err) {
-      // En un console warn porque con ERROR nos tira el cartel de react =B
-      console.warn(`${sortableThingy} no es ordenable con este metodo.\nError: ${err}`)
+      console.info(`${sortableThingy} no es ordenable con este metodo.\nError: ${err}`)
     }
   }
 
