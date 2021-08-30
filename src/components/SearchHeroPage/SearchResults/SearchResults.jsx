@@ -1,17 +1,26 @@
-import React, { useContext } from 'react'
+import React, { useEffect, useState } from 'react'
 
-import { SuperTeamManager } from '../../../context/SuperTeamManagerContext'
+import './searchResults.scss'
+import HeroCard from './HeroCard/HeroCard'
 
-import HeroOptionsBtn from '../SearchHero/HeroOptionsBtn/HeroOptionsBtn'
+const SearchResults = ({ gettingInfo, herosFound, results }) => {
 
-const SearchResults = ({ gettingInfo, herosFound }) => {
-  const { superTeam, checkMaxTeam, checkAlignment, checkMaxByAlignment, addHero, removeHero } = useContext(SuperTeamManager)
+  const [easyModeActive, setEasyModeActive] = useState(false)
+
+  const manageEasyMode = () => {
+    localStorage.setItem('superteam_easymode', !easyModeActive)
+    setEasyModeActive(!easyModeActive)
+  }
+
+  useEffect(() => {
+    JSON.parse(localStorage.getItem('superteam_easymode')) && setEasyModeActive(JSON.parse(localStorage.getItem('superteam_easymode')))
+  }, [])
 
 
   return (
-    <div className='foundContainer'>
+    <div className={`foundContainer ${easyModeActive ? 'easyHover' : ''}`}>
       {
-        herosFound && herosFound.response === 'success'
+        results?.length
           ? <>
             <div className="loadingContainer">
               {
@@ -20,41 +29,24 @@ const SearchResults = ({ gettingInfo, herosFound }) => {
                   : null
               }
             </div>
-            <h6>Busqueda: {herosFound['results-for'].toUpperCase()} - {herosFound.results.length} {herosFound.results.length > 1 ? 'resultados' : 'resultado'}</h6>
-            <div className="cardsContainer">
+            <div className="infoSwitch">
+              <h5>Busqueda: {herosFound['results-for']?.toUpperCase()} - {results?.length} {results?.length > 1 ? 'resultados' : 'resultado'}</h5>
+              <button onClick={manageEasyMode} title={`Click para ${easyModeActive ? 'dejar de ' : ''}ver los powerstats del heroe al posicionarse sobre su imagen`}>
+                <span>Hover</span>
+                {
+                  easyModeActive
+                    ? <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-toggle-on" viewBox="0 0 16 16">
+                      <path d="M5 3a5 5 0 0 0 0 10h6a5 5 0 0 0 0-10H5zm6 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8z" />
+                    </svg>
+                    : <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-toggle-off" viewBox="0 0 16 16">
+                      <path d="M11 4a4 4 0 0 1 0 8H8a4.992 4.992 0 0 0 2-4 4.992 4.992 0 0 0-2-4h3zm-6 8a4 4 0 1 1 0-8 4 4 0 0 1 0 8zM0 8a5 5 0 0 0 5 5h6a5 5 0 0 0 0-10H5a5 5 0 0 0-5 5z" />
+                    </svg>
+                }
+              </button>
+            </div>
+            <div className={'cardsContainer'}>
               {
-                (herosFound.results).map(h => (
-                  <div className={`heroCard ${h.biography.alignment === 'bad' ? 'badHero' : 'goodHero'}`} key={h.id} title={h.name} draggable>
-                    {/* {h.id} */}
-                    <strong>{h.name}</strong>
-                    <div className='flip-card'>
-                      <div className="flip-card-inner">
-                        <div className="flip-card-front">
-                          <img src={h.image.url} alt={h.name} draggable='false' />
-                        </div>
-
-                        <div className="flip-card-back">
-                          <ul>
-                            {
-                              Object.keys(h.powerstats).map((s) => <li key={`PS-${s}-${h.id}`}> <span className='powerStatName'>{s}</span> <span className='powerStatValue'>{h.powerstats[s] === 'null' ? 0 : h.powerstats[s]}</span></li>)
-                            }
-                          </ul>
-                        </div>
-
-                      </div>
-                    </div>
-                    <div className="heroCardActions">
-                      {
-                        superTeam.map(heroInTeam => heroInTeam.id).includes(h.id)
-                          ? <HeroOptionsBtn type='remove' onClick={() => removeHero(h)} title={`Quitar ${h.name} de equipo`} />
-                          : checkMaxTeam()
-                            ? <HeroOptionsBtn title={`Tu equipo esta completo`} />
-                            : checkMaxByAlignment(h)
-                              ? <HeroOptionsBtn title={`Tu equipo alcanzo el tope para heroes con orientacion ${checkAlignment(h) === 'good' ? 'buena' : 'mala'}`} />
-                              : <HeroOptionsBtn type='add' onClick={() => addHero(h)} title={`Agregar ${h.name} a equipo`} />
-                      }
-                    </div>
-                  </div>))
+                results?.map(h => <HeroCard key={'search' + h.id} hero={h} />)
               }
             </div>
           </>

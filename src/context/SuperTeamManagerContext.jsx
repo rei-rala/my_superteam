@@ -15,13 +15,16 @@ export const SuperTeamManagerContext = ({ children }) => {
 
   const [heroSortingTerms, setHeroSortingTerms] = useState(null)
 
-  const checkMaxTeam = () => {
-    return (
-      superTeam && superTeam.length >= 6
-        ? true
-        : false
-    )
-  }
+  const [isTeamMaxed, setIsTeamMaxed] = useState(false)
+
+
+  useEffect(() => {
+    superTeam && superTeam.length >= 6
+      ? !isTeamMaxed && setIsTeamMaxed(true)
+      : isTeamMaxed && setIsTeamMaxed(false)
+
+
+  }, [superTeam, isTeamMaxed])
 
   const checkAlignment = (hero) => {
     return hero.biography.alignment
@@ -40,7 +43,7 @@ export const SuperTeamManagerContext = ({ children }) => {
         alert(`Alcanzado tope de heroes para orientacion ${hero.biography.alignment}`)
       }
       else {
-        if (checkMaxTeam()) {
+        if (isTeamMaxed) {
           alert(`Alcanzado tope de heroes.`)
         }
         else {
@@ -111,6 +114,6 @@ export const SuperTeamManagerContext = ({ children }) => {
   }, [superTeam])
 
 
-  return (<SuperTeamManager.Provider value={{ superTeam, heroSortingTerms, manageSuperTeam, checkMaxTeam, checkAlignment, checkMaxByAlignment, addHero, removeHero, totalPowerStats, averagePowerStats }}> {children} </SuperTeamManager.Provider>
+  return (<SuperTeamManager.Provider value={{ superTeam, heroSortingTerms, setHeroSortingTerms, manageSuperTeam, isTeamMaxed, checkAlignment, checkMaxByAlignment, addHero, removeHero, totalPowerStats, averagePowerStats }}> {children} </SuperTeamManager.Provider>
   )
 }

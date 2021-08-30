@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 
 import './homePage.scss'
-import PowerStatTeamInfo from './PowerStatTeamInfo/PowerStatTeamInfo'
+import TeamPowerStatInfo from './TeamPowerStatInfo/TeamPowerStatInfo'
 import SortButton from '../SortButton/SortButton'
 
 import HeroTeamCard from './HeroTeamCard/HeroTeamCard'
@@ -30,7 +30,7 @@ const HomePage = () => {
                 ? <>
                   <div className="resumeSection">
                     {
-                      Object.keys(averagePowerStats).map(APS => <PowerStatTeamInfo
+                      Object.keys(averagePowerStats).map(APS => <TeamPowerStatInfo
                         key={'div' + APS}
                         className='statImg'
                         powerStat={APS}
@@ -55,7 +55,8 @@ const HomePage = () => {
                 </>
                 : <div className="noTeamContainer">
                   <h4>¡No tienes un equipo activo!</h4>
-                  <span>Para agregar heroes a tu equipo, puedes hacer click <Link to='/search'><button>Aqui</button></Link> </span>
+                  <p>Para agregar heroes a tu equipo, puedes hacer click</p>
+                  <Link to='/search'><button>Aqui</button></Link>
                 </div>
             }
           </>

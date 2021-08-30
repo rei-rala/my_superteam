@@ -1,3 +1,14 @@
+@keyframes sortShow {
+  from {
+    max-width: 0rem;
+    max-height: 0rem;
+  }
+  to {
+    max-width: 2rem;
+    max-height: 2rem;
+  }
+}
+
 .sortBtnSection {
   display: flex;
   justify-content: center;
@@ -5,8 +16,8 @@
   gap: 0.5rem;
 
   button.sortBtn {
-    justify-content: space-around;
-    min-width: 8rem !important;
+    justify-content: center;
+    min-width: 6.5rem !important;
     border-width: 2px;
 
     &:hover {
@@ -17,6 +28,10 @@
     }
     span {
       text-transform: capitalize;
+    }
+
+    svg {
+      animation: 0.25s sortShow 1;
     }
   }
 }

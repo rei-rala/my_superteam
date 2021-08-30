@@ -102,14 +102,20 @@ button:not(.heroOptionBtn) {
   border: 1px solid rgba(255, 255, 255, 0.9);
   color: rgba(255, 255, 255, 0.9);
 
-  & :hover,
+  &:hover,
   .workingButton {
     border-color: hsl(0, 0%, 0%);
     background: rgba(255, 255, 255, 0.9);
     color: hsl(0, 0%, 0%);
   }
-  &.showSearchMenu {
+  &.showSearchMenu,
+  &.menuMobileBtn {
     background-color: black;
+    border-color: white;
+
+    &.activeMenu {
+      background-color: white;
+    }
   }
 }
 

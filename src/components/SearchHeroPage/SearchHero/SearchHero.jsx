@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 
+import './searchHero.scss'
 
-const SearchHero = ({ gettingInfo, setGettingInfo, setHerosFound }) => {
+const SearchHero = ({ gettingInfo, setGettingInfo, herosFound, setHerosFound, setResults }) => {
 
   const [searchMenuActive, setSearchMenuActive] = useState(true)
   const toggleSearchMenu = (e) => {
@@ -36,9 +37,10 @@ const SearchHero = ({ gettingInfo, setGettingInfo, setHerosFound }) => {
             setHerosFound({ error: true })
           }
           else {
+            console.log(data)
             setHerosFound(data)
+            setResults(data.results)
           }
-          return data
         })
         .finally(() => setGettingInfo(false))
     }
@@ -51,7 +53,7 @@ const SearchHero = ({ gettingInfo, setGettingInfo, setHerosFound }) => {
       <input onChange={searchHero} type="text" id='heroSearchInput' name='seekHero' maxLength={15} placeholder='Ingrese busqueda' required />
       <div className="searchOptions">
         {gettingInfo ? <button className='workingButton'> Cargando</ button > : <button> Busqueda</ button >}
-        <button onClick={toggleSearchMenu} className='hideSearchMenu'> Ocultar</ button >
+        {herosFound?.response === 'success' ? <button onClick={toggleSearchMenu} className='hideSearchMenu'> Ocultar</ button > : null}
         <button onClick={toggleSearchMenu} className='showSearchMenu'>
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
