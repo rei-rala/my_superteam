@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import './searchResults.scss'
 import HeroCard from './HeroCard/HeroCard'
 
-const SearchResults = ({ gettingInfo, herosFound, results }) => {
+const SearchResults = ({ herosFound, results }) => {
 
   const [easyModeActive, setEasyModeActive] = useState(false)
 
@@ -22,15 +22,7 @@ const SearchResults = ({ gettingInfo, herosFound, results }) => {
       {
         results?.length
           ? <>
-            <div className="loadingContainer">
-              {
-                gettingInfo
-                  ? 'Cargando'
-                  : null
-              }
-            </div>
             <div className="infoSwitch">
-              <h5>Busqueda: {herosFound['results-for']?.toUpperCase()} - {results?.length} {results?.length > 1 ? 'resultados' : 'resultado'}</h5>
               <button onClick={manageEasyMode} title={`Click para ${easyModeActive ? 'dejar de ' : ''}ver los powerstats del heroe al posicionarse sobre su imagen`}>
                 <span>Hover</span>
                 {
@@ -44,6 +36,7 @@ const SearchResults = ({ gettingInfo, herosFound, results }) => {
                 }
               </button>
             </div>
+            <h5>{results?.length} {results?.length > 1 ? 'resultados' : 'resultado'}</h5>
             <div className={'cardsContainer'}>
               {
                 results?.map(h => <HeroCard key={'search' + h.id} hero={h} />)

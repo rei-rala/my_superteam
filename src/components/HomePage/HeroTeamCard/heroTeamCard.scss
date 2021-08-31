@@ -7,6 +7,7 @@
   cursor: default;
 
   .heroInTeam {
+    position: relative;
     max-height: 15rem;
     width: 100%;
     overflow: hidden;
@@ -45,6 +46,7 @@
 
   .heroInTeamData {
     width: 100%;
+
     ul {
       display: flex;
       justify-content: space-evenly;
@@ -77,6 +79,24 @@
     button:hover {
       transform: scale(1.05);
     }
+
+    .heroHW {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+
+      padding: 1rem 0;
+      width: 100%;
+      border-bottom: 1px solid hsla(0, 0%, 100%, 0.5);
+    }
+
+    .heroInTeamActions {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin: 1rem 0;
+      width: 100%;
+    }
   }
 }
 
@@ -85,6 +105,10 @@
 }
 
 @media screen and (orientation: portrait) and (max-width: 768px) {
+  .heroHW {
+    display: none !important;
+  }
+
   .heroInTeamData {
     display: grid;
 
@@ -106,9 +130,20 @@
   }
 
   .heroInTeamActions {
+    position: static !important;
+    margin: 0 !important;
+
     display: flex;
     justify-content: space-around;
     align-items: center;
-    width: 100%;
+
+    width: 100% !important;
+    max-width: 100% !important;
+
+    a,
+    button,
+    a button {
+      max-width: fit-content;
+    }
   }
 }

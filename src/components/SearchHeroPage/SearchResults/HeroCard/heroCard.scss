@@ -1,17 +1,8 @@
-$cardColorBad: hsla(358, 100%, 31%, 0.5);
+$cardColorBad: hsla(358, 100%, 31%, 0.75);
 $heroBordersBad: 3px ridge $cardColorBad;
 
-$cardColorGood: hsla(108, 100%, 31%, 0.5);
+$cardColorGood: hsla(108, 100%, 31%, 0.75);
 $heroBordersGood: 3px ridge $cardColorGood;
-
-@keyframes showFirst {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
 
 .badHero {
   border: $heroBordersBad;
@@ -63,7 +54,7 @@ $heroBordersGood: 3px ridge $cardColorGood;
 
   cursor: default;
   overflow: hidden;
-  animation: 0.5s showFirst 1;
+  animation: 1s aparecer 1;
 
   strong {
     position: absolute;
@@ -84,7 +75,11 @@ $heroBordersGood: 3px ridge $cardColorGood;
     height: 100%;
   }
 
-  button {
+  i {
+    margin: 1rem;
+  }
+  button,
+  b {
     cursor: pointer;
 
     svg {
@@ -138,6 +133,9 @@ $heroBordersGood: 3px ridge $cardColorGood;
 
   .flip-card-front,
   .flip-card-back {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
     overflow: hidden;
     position: absolute;
     width: 100%;
@@ -152,7 +150,7 @@ $heroBordersGood: 3px ridge $cardColorGood;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: hsla(0, 100%, 3%, 0.5);
+    background-color: hsla(0, 100%, 3%, 0.75);
     transform: rotateY(180deg);
   }
 }
@@ -160,7 +158,6 @@ $heroBordersGood: 3px ridge $cardColorGood;
 .easyHover {
   .infoSwitch {
     button {
-      color: lightgreen;
       border-color: lightgreen;
 
       svg {
@@ -168,7 +165,6 @@ $heroBordersGood: 3px ridge $cardColorGood;
       }
 
       &:hover {
-        color: green;
         border-color: green;
         svg {
           fill: green;

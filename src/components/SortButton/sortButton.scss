@@ -1,19 +1,10 @@
-@keyframes sortShow {
-  from {
-    max-width: 0rem;
-    max-height: 0rem;
-  }
-  to {
-    max-width: 2rem;
-    max-height: 2rem;
-  }
-}
-
 .sortBtnSection {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   gap: 0.5rem;
+
+  animation: 1s aparecer 1;
 
   button.sortBtn {
     justify-content: center;
@@ -31,7 +22,7 @@
     }
 
     svg {
-      animation: 0.25s sortShow 1;
+      animation: 0.25s aparecer 1;
     }
   }
 }

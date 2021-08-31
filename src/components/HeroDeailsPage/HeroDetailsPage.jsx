@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import HeroDetail from './HeroDetail/HeroDetail'
+import Loading from '../Loading/Loading'
 
 const HeroDetailsPage = () => {
   const { idHero } = useParams()
@@ -30,7 +31,7 @@ const HeroDetailsPage = () => {
 
   return (
     idHero && gettingInfo
-      ? 'CARGANDO'
+      ? <Loading />
       : heroDetails
         ? <HeroDetail hero={heroDetails} />
         : '404 - No se encontro al heroe especificado'

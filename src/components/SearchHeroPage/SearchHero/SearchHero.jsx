@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import './searchHero.scss'
 
-const SearchHero = ({ gettingInfo, setGettingInfo, herosFound, setHerosFound, setResults }) => {
+const SearchHero = ({ gettingInfo, setGettingInfo, setHerosFound, results, setResults }) => {
 
   const [searchMenuActive, setSearchMenuActive] = useState(true)
   const toggleSearchMenu = (e) => {
@@ -33,13 +33,18 @@ const SearchHero = ({ gettingInfo, setGettingInfo, herosFound, setHerosFound, se
       await axios.get(`https://superheroapi.com/api.php/547377806383395/search/${seek}`)
         .then(r => (r.data))
         .then(data => {
+
           if (data?.response === 'error') {
             setHerosFound({ error: true })
+            setResults([])
           }
-          else {
-            console.log(data)
+          else if (data?.response === 'success') {
             setHerosFound(data)
             setResults(data.results)
+          }
+          else {
+            setHerosFound({ error: true })
+            setResults([])
           }
         })
         .finally(() => setGettingInfo(false))
@@ -50,10 +55,10 @@ const SearchHero = ({ gettingInfo, setGettingInfo, herosFound, setHerosFound, se
   return (
     <form onSubmit={searchHero} className={searchMenuActive ? 'searchMenuOn' : 'searchMenuOff'}>
       <label htmlFor='heroSearchInput'>Nombre de heroe</label>
-      <input onChange={searchHero} type="text" id='heroSearchInput' name='seekHero' maxLength={15} placeholder='Ingrese busqueda' required />
+      <input onChange={searchHero} type="text" id='heroSearchInput' name='seekHero' minLength={2} maxLength={15} placeholder='Ingrese busqueda' required />
       <div className="searchOptions">
         {gettingInfo ? <button className='workingButton'> Cargando</ button > : <button> Busqueda</ button >}
-        {herosFound?.response === 'success' ? <button onClick={toggleSearchMenu} className='hideSearchMenu'> Ocultar</ button > : null}
+        {results?.length > 0 && <button onClick={toggleSearchMenu} className='hideSearchMenu'> Ocultar</ button >}
         <button onClick={toggleSearchMenu} className='showSearchMenu'>
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />

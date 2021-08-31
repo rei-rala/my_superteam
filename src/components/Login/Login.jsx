@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import { UserLogged } from '../../context/UserLoggedContext';
 import './login.scss'
+import Loading from '../Loading/Loading'
 
 const Login = () => {
   const { tryLogIn, loggingIn, triedWrongCredentials } = useContext(UserLogged)
@@ -23,7 +24,10 @@ const Login = () => {
         </div>
 
         {loggingIn || triedWrongCredentials ? <button disabled className='workingButton'>Espere un momento</button> : <button>Iniciar</button>}
+
       </form>
+
+      {(loggingIn || triedWrongCredentials) && <Loading />}
 
     </section>
   )

@@ -4,6 +4,12 @@ import './teamPowerStatInfo.scss'
 
 const TeamPowerStatInfo = ({ powerStat, powerStatAverage, powerStatTotal, isHero = false }) => {
 
+  powerStatTotal = (
+    powerStatTotal === 'null' || powerStatTotal === 'Null'
+      ? 0
+      : powerStatTotal
+  )
+
   const [imgPath, setImgPath] = useState('')
 
   useEffect(() => {
@@ -31,7 +37,6 @@ const TeamPowerStatInfo = ({ powerStat, powerStatAverage, powerStatTotal, isHero
         path += powerStat
     }
     setImgPath(path)
-
   }, [powerStat])
 
 

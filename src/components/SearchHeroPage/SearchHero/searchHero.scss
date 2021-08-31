@@ -2,6 +2,10 @@
   text-align: center;
   width: 100%;
 
+  .hideSearchMenu {
+    animation: 0.5s aparecer 1;
+  }
+
   form {
     position: fixed;
     transform: translate(-50%, -50%);
@@ -24,6 +28,15 @@
       display: flex;
       flex-direction: column;
       align-items: stretch;
+
+      &:hover {
+        .showSearchMenu {
+          background-color: white;
+          svg {
+            fill: black;
+          }
+        }
+      }
 
       &:not(.showSearchMenu) {
         width: 10rem;
@@ -76,5 +89,12 @@
     .searchOptions {
       width: 100% !important;
     }
+  }
+}
+
+@media only screen and (orientation: landscape) {
+  .searchMenuOff {
+    top: 85% !important;
+    left: 85% !important;
   }
 }
