@@ -11,8 +11,6 @@ const Footer = ({ pageLocation, scrollTop }) => {
   const { isUserLogged } = useContext(UserLogged)
 
   const [footerResume, setFooterResume] = useState(null)
-  const manageFooterResume = (info) => setFooterResume(info)
-
   const [backToTop, showBackToTop] = useState(false)
 
 
@@ -20,11 +18,11 @@ const Footer = ({ pageLocation, scrollTop }) => {
     const test = (ev) => {
       ev.preventDefault()
       ev.stopPropagation()
-      window.scrollY > 450 && !backToTop && showBackToTop(true)
-      window.scrollY <= 450 && backToTop && showBackToTop(false)
+      window.scrollY > 450 && showBackToTop(true)
+      window.scrollY <= 450 && showBackToTop(false)
     }
     window.addEventListener('scroll', test)
-  }, [backToTop]);
+  }, []);
 
 
   useEffect(() => {
@@ -35,10 +33,10 @@ const Footer = ({ pageLocation, scrollTop }) => {
       alignments.forEach(a => {
         resume[a] = superTeam.filter(h => h.biography.alignment === a).length
       })
-      manageFooterResume(resume)
+      setFooterResume(resume)
     }
     else {
-      manageFooterResume(null)
+      setFooterResume(null)
     }
   }, [superTeam])
 
@@ -59,7 +57,7 @@ const Footer = ({ pageLocation, scrollTop }) => {
           {
             pageLocation && pageLocation === '/home'
               ? <Link to='/search'>Buscar heroes</Link>
-              : <Link to='/home'>Equipo</Link>
+              : <Link to='/home'>Mi equipo</Link>
           }
         </div>
         <div className="spacer"></div>

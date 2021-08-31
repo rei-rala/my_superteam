@@ -5,6 +5,7 @@ import SearchResults from './SearchResults/SearchResults'
 import SortButton from '../SortButton/SortButton'
 import { SuperTeamManager } from '../../context/SuperTeamManagerContext'
 import { HoldSearch } from '../../context/HoldSearchContext'
+import Loading from '../Loading/Loading'
 
 
 const SearchHeroPage = () => {
@@ -34,16 +35,23 @@ const SearchHeroPage = () => {
     <section className='searchHero'>
       {
         isUserLogged
-          ? <div className="control">
+          ? <>
+            <SearchHero setGettingInfo={setGettingInfo} setHerosFound={setHerosFound} results={results} setResults={setResults} />
             {
-              herosFound?.results?.length > 1 && heroSortingTerms && <SortButton toSort={herosFound.results} displayFunction={setResults} arraySortingTerms={heroSortingTerms} varUseEffect={toggleRefresh} />
+              gettingInfo
+                ? <Loading />
+                : < div className="control">
+                  {
+                    herosFound?.results?.length > 1 && heroSortingTerms && <SortButton toSort={herosFound.results} displayFunction={setResults} arraySortingTerms={heroSortingTerms} varUseEffect={toggleRefresh} />
+                  }
+                  <SearchResults herosFound={herosFound} results={results} />
+                </div>
             }
-            <SearchHero setGettingInfo={setGettingInfo} herosFound={herosFound} setHerosFound={setHerosFound} setResults={setResults} />
-            <SearchResults gettingInfo={gettingInfo} herosFound={herosFound} results={results} />
-          </div>
+          </>
           : null
       }
-    </section>
+
+    </section >
 
   )
 }

@@ -1,4 +1,4 @@
-@keyframes appear {
+@keyframes footerGroupShow {
   from {
     width: 0;
   }
@@ -42,7 +42,7 @@
     display: grid;
     place-items: center;
 
-    animation: appear 1s 1;
+    animation: footerGroupShow 1s 1;
     overflow: hidden;
 
     width: 2rem;

@@ -1,29 +1,25 @@
 import React, { createContext, useEffect, useState } from 'react';
+import { tryParseInt } from '../Helpers/Helpers';
 
 export const SuperTeamManager = createContext();
 
 export const SuperTeamManagerContext = ({ children }) => {
 
   const [superTeam, setSuperTeam] = useState([])
-  const manageSuperTeam = (team) => setSuperTeam(team)
+  const [isTeamMaxed, setIsTeamMaxed] = useState(false)
 
   const [totalPowerStats, setTotalPowerStats] = useState(null)
-  const manageAveragePowerStats = (powerStatsObject) => setAveragePowerStats(powerStatsObject)
-
   const [averagePowerStats, setAveragePowerStats] = useState(null)
-  const manageTotalPowerStats = (powerStatsObject) => setTotalPowerStats(powerStatsObject)
 
   const [heroSortingTerms, setHeroSortingTerms] = useState(null)
 
-  const [isTeamMaxed, setIsTeamMaxed] = useState(false)
+  const [heroAvgHeightWeight, setHeroAvgHeightWeight] = useState({ weight: 0, height: 0 })
 
 
   useEffect(() => {
     superTeam && superTeam.length >= 6
       ? !isTeamMaxed && setIsTeamMaxed(true)
       : isTeamMaxed && setIsTeamMaxed(false)
-
-
   }, [superTeam, isTeamMaxed])
 
   const checkAlignment = (hero) => {
@@ -40,14 +36,14 @@ export const SuperTeamManagerContext = ({ children }) => {
     }
     else {
       if (checkMaxByAlignment(hero)) {
-        alert(`Alcanzado tope de heroes para orientacion ${hero.biography.alignment}`)
+        alert(`No se agrego ${hero.name}.\nAlcanzado tope de heroes para orientacion ${hero.biography.alignment}`)
       }
       else {
         if (isTeamMaxed) {
           alert(`Alcanzado tope de heroes.`)
         }
         else {
-          manageSuperTeam([...superTeam, hero])
+          setSuperTeam([...superTeam, hero])
         }
       }
     }
@@ -56,7 +52,7 @@ export const SuperTeamManagerContext = ({ children }) => {
   const removeHero = (hero) => {
     if (superTeam.map(h => h.id).includes(hero.id)) {
       if (window.confirm(`Desea quitar a ${hero.name} de su equipo?`)) {
-        manageSuperTeam(superTeam.filter(heroInTeam => heroInTeam.id !== hero.id))
+        setSuperTeam(superTeam.filter(heroInTeam => heroInTeam.id !== hero.id))
       }
     }
   }
@@ -67,7 +63,6 @@ export const SuperTeamManagerContext = ({ children }) => {
       const firstHeroStats = Object.keys((superTeam[0]).powerstats).map(s => `powerstats.${s}`)
       const customSortingTerms = ['name', 'biography.alignment', ...firstHeroStats]
 
-      setHeroSortingTerms(customSortingTerms)
       const arrayHeroStats = superTeam.map(hero => hero.powerstats)
       const superTeamTotalPowerStats = {}
       const AveragePowerStats = {}
@@ -94,7 +89,6 @@ export const SuperTeamManagerContext = ({ children }) => {
         })
       })
 
-      manageTotalPowerStats(superTeamTotalPowerStats)
 
       for (let powerstat in superTeamTotalPowerStats) {
         AveragePowerStats[powerstat] = (
@@ -104,16 +98,55 @@ export const SuperTeamManagerContext = ({ children }) => {
         )
       }
 
-      manageAveragePowerStats(null)
-      manageAveragePowerStats(Object.fromEntries(Object.entries(AveragePowerStats).sort((a, b) => a[1] > b[1] ? -1 : 1)))
+      const getAvgHeightWeight = () => {
+        const totalHW = { weight: 0, height: 0 }
+
+        for (let hero of superTeam) {
+          const {
+            appearance: { weight: [, weightKGSentence] },
+            appearance: { height: [, heightCMSentence] }
+          } = hero
+
+
+          const weightKG = tryParseInt((weightKGSentence.split(' '))[0])
+          const heightCM = tryParseInt((heightCMSentence.split(' '))[0])
+
+
+          totalHW.weight += (typeof weightKG === typeof 0) && weightKG
+          totalHW.height += (typeof heightCM === typeof 0) && heightCM
+        }
+
+        return {
+          weight: Math.ceil(totalHW.weight / superTeam.length),
+          height: Math.ceil(totalHW.height / superTeam.length)
+        }
+      }
+      const avgHW = getAvgHeightWeight()
+
+      setTotalPowerStats(superTeamTotalPowerStats)
+      setHeroSortingTerms(customSortingTerms)
+      setAveragePowerStats(Object.fromEntries(Object.entries(AveragePowerStats).sort((a, b) => a[1] > b[1] ? -1 : 1)))
+      setHeroAvgHeightWeight(avgHW)
     }
     else {
-      manageAveragePowerStats(null)
+      setAveragePowerStats(null)
+      setTotalPowerStats(null)
+      setHeroAvgHeightWeight({ height: 0, weight: 0 })
+      setAveragePowerStats(null)
     }
     localStorage.setItem('superTeam', JSON.stringify(superTeam))
   }, [superTeam])
 
 
-  return (<SuperTeamManager.Provider value={{ superTeam, heroSortingTerms, setHeroSortingTerms, manageSuperTeam, isTeamMaxed, checkAlignment, checkMaxByAlignment, addHero, removeHero, totalPowerStats, averagePowerStats }}> {children} </SuperTeamManager.Provider>
+  return (
+    <SuperTeamManager.Provider
+      value={{
+        superTeam, setSuperTeam, addHero, removeHero,
+        isTeamMaxed, checkAlignment, checkMaxByAlignment,
+        heroSortingTerms, setHeroSortingTerms,
+        totalPowerStats, averagePowerStats,
+        heroAvgHeightWeight
+      }}
+    > {children} </SuperTeamManager.Provider>
   )
 }

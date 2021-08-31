@@ -1,6 +1,6 @@
 .heroPowerStats {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
 
   padding: 1rem 0;
@@ -11,6 +11,10 @@
   border-bottom: 1px solid hsla(0, 0%, 100%, 0.5);
 
   padding-bottom: 1.5rem;
+
+  button {
+    position: sticky;
+  }
 }
 
 .heroDetailContainer {
@@ -18,38 +22,56 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
+  gap: 1rem;
   text-align: center;
 
   margin: 1%;
   width: 98%;
 
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  background-color: rgba(17, 25, 40, 0.75);
-  border-radius: 12px;
-  border: 1px solid hsla(0, 0%, 100%, 0.5);
+  h2 {
+    margin: 0.5rem;
+  }
 
-  overflow: hidden;
+  button {
+    &:first-child {
+      display: none;
+    }
+  }
+
+  .heroDetail_Head,
+  .heroDetail_Body {
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    background-color: rgba(17, 25, 40, 0.75);
+    border-radius: 12px;
+    border: 1px solid hsla(0, 0%, 100%, 0.5);
+
+    overflow: hidden;
+  }
+  .heroDetail_Body {
+    min-height: 20rem;
+  }
 
   h2,
-  li:not(.subList) {
-    text-align: center;
-    border-bottom: 1px solid hsla(0, 0%, 100%, 0.5);
-    border-top: 1px solid hsla(0, 0%, 100%, 0.5);
+  li {
+    &:first-child {
+      padding-top: 0.25rem;
+    }
+    &:not(.subList):not(:last-child) {
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid hsla(0, 0%, 100%, 0.5);
+    }
   }
 
   .heroDetail {
     &_Head,
     &_Body {
       width: 100%;
+      animation: 0.5s aparecer 1;
     }
 
     &_Body {
       display: flex;
-      * {
-        width: 100%;
-      }
 
       img.heroDetailImg {
         max-width: 45%;
@@ -58,14 +80,19 @@
         border: 1px solid hsla(0, 0%, 100%, 0.5);
       }
       .sideData {
+        width: 100%;
         & > ul {
           display: flex;
           flex-direction: column;
-          justify-content: space-around;
+          justify-content: space-evenly;
           height: 100%;
+          gap: 2.5%;
+          overflow-y: auto;
+          transition: all 1s;
 
           li {
             display: inline !important;
+            width: 100%;
           }
         }
       }
@@ -73,5 +100,23 @@
   }
 }
 
-@media (max-width: 500px) {
+@media (min-width: 568px) {
+  .heroDetailContainer {
+    button {
+      &:first-child {
+        display: block;
+        position: sticky;
+        top: 5rem;
+        z-index: 99;
+      }
+      &:last-child {
+        display: none;
+      }
+    }
+  }
+  .sideData {
+    & > ul {
+      justify-content: center;
+    }
+  }
 }

@@ -12,8 +12,10 @@ import HeroTeamCard from './HeroTeamCard/HeroTeamCard'
 
 const HomePage = () => {
 
-  const { superTeam, manageSuperTeam, removeHero, heroSortingTerms, totalPowerStats, averagePowerStats } = useContext(SuperTeamManager)
+  const { superTeam, manageSuperTeam, removeHero, heroSortingTerms, totalPowerStats, averagePowerStats, heroAvgHeightWeight } = useContext(SuperTeamManager)
   const { isUserLogged, usernameLogged } = useContext(UserLogged)
+
+  const { height, weight } = heroAvgHeightWeight
 
   const [refreshesBySort, setRefreshesBySort] = useState(0);
   const toggleRefresh = () => setRefreshesBySort(refreshesBySort + 1)
@@ -39,6 +41,18 @@ const HomePage = () => {
                       />
                       )
                     }
+                  </div>
+                  <div className="heightAndWeight">
+                    <h5>Otros aspectos promedios</h5>
+                    <hr />
+                    <p>
+                      <span> Altura</span>
+                      <span>{height} cms</span>
+                    </p>
+                    <p>
+                      <span> Peso</span>
+                      <span>{weight} kg</span>
+                    </p>
                   </div>
                   <div className="mySuperTeam">
                     <SortButton toSort={superTeam} displayFunction={manageSuperTeam} varUseEffect={toggleRefresh} arraySortingTerms={heroSortingTerms} />

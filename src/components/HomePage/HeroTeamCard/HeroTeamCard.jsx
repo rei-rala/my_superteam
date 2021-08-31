@@ -1,31 +1,44 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import './heroTeamCard.scss'
 
 import { Link } from 'react-router-dom'
+import { replaceImgNotFound } from '../../../Helpers/Helpers'
 
 import HeroInTeamPowerStat from '../HeroInTeamPowerStat/HeroInTeamPowerStat'
-import { SuperTeamManager } from '../../../context/SuperTeamManagerContext'
 
 const HeroTeamCard = ({ hero, removeHeroAction }) => {
-  const { checkAlignment } = useContext(SuperTeamManager)
+
+  const {
+    id,
+    name,
+    biography: { alignment } = {},
+    image: { url } = {},
+    appearance: { weight: [, weightKG] },
+    appearance: { height: [, heightCM] }
+  } = hero
 
   return (
     <div className="heroInTeam" >
-      <h3> {hero.name}</h3>
+      <h3> {name}</h3>
       <div className="heroInTeamBody">
-        <img src={hero.image.url} alt="" />
+        <img src={url} alt={name} onError={replaceImgNotFound} />
 
         <div className="heroInTeamData">
-          <p className={'heroAlignment ' + checkAlignment(hero)}>Alignment <strong>{checkAlignment(hero)}</strong></p>
+          <p className={`heroAlignment ${alignment}`}>Alignment <strong>{alignment}</strong></p>
           <HeroInTeamPowerStat hero={hero} />
 
+          <div className="heroHW">
+            <span> Peso {weightKG}</span>
+            <span>Altura {heightCM}</span>
+          </div>
+
           <div className="heroInTeamActions" >
-            <Link to={`/hero/${hero.id}`}> <button title={`Informacion detallada sobre ${hero.name}`}>Detalles</button></Link>
-            <button onClick={removeHeroAction} title={`Quitar a ${hero.name} de tu equipo`}>Quitar</button>
+            <Link to={`/hero/${id}`}> <button title={`Informacion detallada sobre ${name}`}>Detalles</button></Link>
+            <button onClick={removeHeroAction} title={`Quitar a ${name} de tu equipo`}>Quitar</button>
           </div>
         </div>
       </div>
-    </div>
+    </div >
   )
 
 }

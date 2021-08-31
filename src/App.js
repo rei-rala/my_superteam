@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react';
-import './styles/reset.scss';
+import './styles/general.scss';
 
 import { Redirect, Route, useLocation } from 'react-router';
 
@@ -32,7 +32,7 @@ function App() {
 
   return (
     <>
-      <Route exact path='/'>
+      <Route path='/'>
         {
           isUserLogged
             ? <Redirect to='/home' />
@@ -41,7 +41,7 @@ function App() {
       </Route>
 
 
-      <Route exact path='/login'>
+      <Route path='/login'>
         {
           isUserLogged
             ? <Redirect to='/home' />
@@ -55,10 +55,14 @@ function App() {
 
 
           <Route path='/hero/:idHero'>
-            <HeroDetailsPage />
+            {
+              isUserLogged
+                ? <HeroDetailsPage />
+                : <Redirect to='/login' />
+            }
           </Route>
 
-          <Route exact path='/test'>
+          <Route path='/test'>
             {
               isUserLogged
                 ? <>
@@ -69,7 +73,7 @@ function App() {
             }
           </Route>
 
-          <Route exact path='/home'>
+          <Route path='/home'>
             {
               isUserLogged
                 ? <HomePage />
@@ -77,7 +81,7 @@ function App() {
             }
           </Route>
 
-          <Route exact path='/search'>
+          <Route path='/search'>
             {
               isUserLogged
                 ? <SearchHeroPage />

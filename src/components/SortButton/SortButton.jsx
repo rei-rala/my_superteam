@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { tryParseInt } from '../../Helpers/Helpers'
 import './sortButton.scss'
 // ! rei - https://github.com/rei-rala
 
@@ -16,15 +17,6 @@ const SortButton = ({ toSort, displayFunction, arraySortingTerms, varUseEffect }
   //primera variable es tipo de orden asc/desc, segunda variable es la razon del sort(precio, nombre, etc)
   const [sortType, setSortType] = useState({ orden: 'none', razon: 'none', esNumerico: false })
   const manageSortState = ({ orden, razon, esNumerico }) => setSortType({ orden, razon, esNumerico })
-
-  // Esta funcion nos permitira acceder a nesting en arrays y otras validaciones =P
-  const tryParseInt = (numberLike) => {
-    return (
-      isNaN(parseInt(numberLike))
-        ? numberLike
-        : parseInt(numberLike)
-    )
-  }
 
   // ? nuestra verdadera funcion encargada del orden, para invocarla hay que enviarle de argumentos: sortableThingy = toSort, manageDisplay=displayFunction, sortBy=sortingTerm
   const toggleSort = (sortableThingy, manageDisplay, sortBy) => {
@@ -49,7 +41,7 @@ const SortButton = ({ toSort, displayFunction, arraySortingTerms, varUseEffect }
           preSortB = preSortB[nestingLevel]
         }
 
-        let isNumber = !isNaN(preSortA) && !isNaN(preSortB)
+        let isNumber = !(isNaN(preSortA) && isNaN(preSortB)) || (preSortA === 'Null' || preSortB === 'Null')
         // Compruebo si existe lo que vamos a hacer sort
         // Comprobacion de que NO este ordenado de forma ascendente y por la razon del sort
         //  si se cumple, deducimos que esta ordenado descendentemente o no ordenado, entonces lo ordenamos ascendente

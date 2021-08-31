@@ -1,6 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { SuperTeamManager } from '../../../../context/SuperTeamManagerContext'
 import HeroOptionsBtn from './HeroOptionsBtn/HeroOptionsBtn'
+import { Link } from 'react-router-dom'
+
+import { replaceImgNotFound } from '../../../../Helpers/Helpers'
 
 import './heroCard.scss'
 
@@ -32,11 +35,11 @@ const HeroCard = ({ hero }) => {
 
   return (
     <div className={`heroCard ${aligmentHero ?? ''}`} key={hero.id} title={hero.name} draggable>
-      <strong>{hero.name}</strong>
+      <strong title={`Click para ver informacion de ${hero.name}`}><Link to={`/hero/${hero.id}`}>{hero.name}</Link></strong>
       <div className='flip-card'>
         <div className="flip-card-inner">
           <div className="flip-card-front">
-            <img src={hero.image.url} alt={hero.name} draggable='false' />
+            <img src={hero.image.url} alt={hero.name} onError={replaceImgNotFound} draggable='false' />
           </div>
 
           <div className="flip-card-back">
@@ -45,6 +48,7 @@ const HeroCard = ({ hero }) => {
                 Object.keys(hero.powerstats).map((s) => <li key={`PS - ${s} -${hero.id} `}> <span className='powerStatName'>{s}</span> <span className='powerStatValue'>{hero.powerstats[s] === 'null' ? 0 : hero.powerstats[s]}</span></li>)
               }
             </ul>
+            <i>Haz click <Link to={`/hero/${hero.id}`}><b>aqui</b></Link> o en el nombre del heroe para ver mas detalles</i>
           </div>
 
         </div>
@@ -60,7 +64,7 @@ const HeroCard = ({ hero }) => {
                 : <HeroOptionsBtn type='add' onClick={() => addHero(hero)} title={`Agregar ${hero.name} a equipo`} />
         }
       </div>
-    </div>
+    </div >
   )
 }
 
