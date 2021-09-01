@@ -50,51 +50,39 @@ function App() {
         }
       </Route>
 
-      <SuperTeamManagerContext>
-        <Header />
-        <HoldSearchContext>
-          <ManageFirestoreContext>
+      {
+        isUserLogged
+          ? <SuperTeamManagerContext>
+            <Header />
+            <HoldSearchContext>
+              <ManageFirestoreContext>
 
-            <LoadingFBWatch />
-            <Route path='/hero/:idHero'>
-              {
-                isUserLogged
-                  ? <HeroDetailsPage />
-                  : <Redirect to='/login' />
-              }
-            </Route>
+                <LoadingFBWatch />
+                <Route path='/hero/:idHero'>
+                  <HeroDetailsPage />
+                </Route>
 
-            <Route path='/test'>
-              {
-                isUserLogged
-                  ? <>
-                    <HomePage />
-                    <SearchHeroPage />
-                  </>
-                  : <Redirect to='/login' />
-              }
-            </Route>
+                <Route path='/test'>
+                  <HomePage />
+                  <SearchHeroPage />
+                </Route>
 
-            <Route path='/home'>
-              {
-                isUserLogged
-                  ? <HomePage />
-                  : <Redirect to='/login' />
-              }
-            </Route>
+                <Route path='/home'>
+                  <HomePage />
+                </Route>
 
-            <Route path='/search'>
-              {
-                isUserLogged
-                  ? <SearchHeroPage />
-                  : <Redirect to='/login' />
-              }
-            </Route>
+                <Route path='/search'>
+                  <SearchHeroPage />
+                </Route>
 
-          </ManageFirestoreContext>
-        </HoldSearchContext>
-        <Footer pageLocation={pageLocation} scrollTop={scrollTop} />
-      </SuperTeamManagerContext>
+              </ManageFirestoreContext>
+            </HoldSearchContext>
+            <Footer pageLocation={pageLocation} scrollTop={scrollTop} />
+          </SuperTeamManagerContext>
+
+          : <Redirect to='/login' />
+      }
+
     </>
   );
 }

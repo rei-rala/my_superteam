@@ -12,6 +12,7 @@ Challenge para Alkemy | React + SuperHero API
     <li><code>Node-Sass</code></li>
     <li><code>React JS</code></li>
     <li><code>React Router</code></li>
+    <li><code>Firestore Firebase</code></li>
   </ul>
 </figure>
 
@@ -21,9 +22,10 @@ Challenge para Alkemy | React + SuperHero API
   <figcaption><h4> Featuring: UI </h4></figcaption>
   <ul>
     <li><i>Responsive</i> en desktop, mobile portrait y landscape.</li>
-    <li>Diseño <i>glassmorphist</i>.</li>
+    <li><i>Glassmorphist</i> design.</li>
     <li>Se incorporo un indicador de carga en secciones donde   correspondiera.</li>
     <li>Se incorporaron animaciones y transiciones en buena parte del sitio para suavizar las vistas y cambios.</li>
+    <li>El equipo del usuario se guarda automaticamente con cada edicion y el mismo es recuperado al refrescar la pagina o iniciar sesion.</li>
     <li>Se manipulan las excepciones en tipo de dato (Ej: <code>xPowerStat = 'Null'</code>)  y errores <code>404</code> de imagenes.</li>
     <li> <b>Header</b>
       <ul> 

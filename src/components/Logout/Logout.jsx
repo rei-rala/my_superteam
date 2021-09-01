@@ -4,7 +4,8 @@ import { UserLogged } from '../../context/UserLoggedContext';
 import { SuperTeamManager } from '../../context/SuperTeamManagerContext'
 
 const LogOut = ({ aditionalOnClick = () => { } }) => {
-  const { setUserLogged, usernameLogged, setUsernameLogged, shortUsernameLogged, setShortUsernameLogged } = useContext(UserLogged)
+  const { setUserLogged, usernameLogged, setUsernameLogged, shortUsernameLogged, setShortUsernameLogged,
+    setAreCredsValid } = useContext(UserLogged)
   const { setSuperTeam } = useContext(SuperTeamManager)
 
   const loggingOut = (ev) => {
@@ -12,9 +13,10 @@ const LogOut = ({ aditionalOnClick = () => { } }) => {
     ev.stopPropagation();
 
     if (window.confirm(`Desea cerrar la sesion de ${usernameLogged}?`)) {
-      localStorage.removeItem('superteam_access')
+      localStorage.removeItem('superteam_token')
       localStorage.removeItem('superteam_email')
       setUserLogged(false)
+      setAreCredsValid(false)
       setUsernameLogged(null)
       setShortUsernameLogged(null)
       setSuperTeam([])

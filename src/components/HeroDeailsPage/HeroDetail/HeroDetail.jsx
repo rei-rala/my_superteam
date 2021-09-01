@@ -3,7 +3,7 @@ import React, { useContext } from 'react'
 import './heroDetail.scss'
 import TeamPowerStatInfo from '../../HomePage/TeamPowerStatInfo/TeamPowerStatInfo'
 import { useHistory } from 'react-router-dom'
-import HeroOptionsBtn from '../../SearchHeroPage/SearchResults/HeroCard/HeroOptionsBtn/HeroOptionsBtn'
+import HeroOptionsBtn from '../../HeroOptionsBtn/HeroOptionsBtn'
 import { replaceImgNotFound } from '../../../Helpers/Helpers'
 import { SuperTeamManager } from '../../../context/SuperTeamManagerContext'
 

@@ -60,7 +60,6 @@ export const SuperTeamManagerContext = ({ children }) => {
     }
   }
 
-
   useEffect(() => {
     if (superTeam.length) {
       const firstHeroStats = Object.keys((superTeam[0]).powerstats).map(s => `powerstats.${s}`)

@@ -9,12 +9,18 @@ export const UserLoggedContext = ({ children }) => {
 
   const [usernameLogged, setUsernameLogged] = useState(null)
   const [shortUsernameLogged, setShortUsernameLogged] = useState(null)
-  const [UENCRYPT, setUENCRYPT] = useState(null)
 
-  const [userInfo, setUserInfo] = useState({})
+  const [userInfo, setUserInfo] = useState(null)
 
   const [loggingIn, setLoggingIn] = useState(false)
   const [triedWrongCredentials, setTriedWrongCredentials] = useState(false);
+
+  const [areCredsValid, setAreCredsValid] = useState(false)
+
+
+  const axios = require('axios').default
+  const CancelToken = axios.CancelToken;
+  const source = CancelToken.source()
 
   const tryLogIn = async (ev) => {
     ev.preventDefault();
@@ -22,91 +28,70 @@ export const UserLoggedContext = ({ children }) => {
 
     const lowerMail = (ev.target.userEmail.value).toLowerCase()
 
-    const credentials = {
+    logIn({
       email: lowerMail,
       password: ev.target.userPassword.value
-    }
+    })
+  }
 
-    if (!loggingIn) {
-      setLoggingIn(true)
-      setUserInfo(credentials)
-    }
+  const logIn = async (userInfoInput) => {
+    setLoggingIn(true)
+    const mailEnc = await digestMessage(userInfoInput.email)
+
+    axios({
+      method: 'post',
+      url: 'http://challenge-react.alkemy.org/',
+      data: userInfoInput
+    }, {
+      cancelToken: source.token,
+    })
+      .then(r => {
+        try {
+
+          if (r.status === 200) {
+            console.log(`Iniciado con exito. Codigo ${r.status}`)
+
+            localStorage.setItem('superteam_token', r.data.token)
+            localStorage.setItem('superteam_email', userInfoInput.email)
+            setUsernameLogged(userInfoInput.email)
+
+            const shortUsername = (userInfoInput.email).split('@')[0]
+            setShortUsernameLogged(
+              (
+                shortUsername.length > 12
+                  ? shortUsername.slice(0, 9) + '...'
+                  : shortUsername
+              ).toUpperCase()
+            )
+            setUserInfo({ ...userInfoInput, emailEncrypted: mailEnc })
+            setAreCredsValid(true)
+
+          }
+          else throw new Error('Error')
+        }
+        catch (err) {
+          setTriedWrongCredentials({ error: true })
+        }
+      })
+      .catch(err => {
+        setTriedWrongCredentials({ error: true, type: err })
+        setAreCredsValid(false)
+      })
+      .finally(() => setLoggingIn(false))
+
   }
 
   useEffect(() => {
+    areCredsValid && setUserLogged(true)
+  }, [areCredsValid])
 
-    const sessionData = {}
-    // No he visto como hacer auth con otras herramientas, asi que por ahora servira
-    const authUser = (encryptedMail, encryptedPassword) => {
-      const users = [
-        {
-          mail: '9bc5e0d6ba78769e7aea29c57d9315348a6d879ac22a17b68cd14fe00e1f1478',
-          password: '275976081ce1abf67779eb3c388b5e14531082e52137502e264776e1a6a11595',
-        },
-        {
-          mail: '97d0f744548aa446bba6cbb198d375bd8b224429f59093016b7fa90d1b3febda',
-          password: '76cb73cd1829daa4fa75788e27a756600b5f62ab03f2a9bd15d4a56644a22b78',
-        }
-      ]
-      const u = users.find(u => u.mail === encryptedMail)
-      const ok = u?.password === encryptedPassword || false
-
-      return ok
-    }
-
-    const logIn = async ({ email, password }) => {
-      setLoggingIn(true)
-
-      const digestMail = await digestMessage(email);
-      const digestPass = await digestMessage(password);
-      const validCredential = authUser(digestMail, digestPass)
-
-
-      sessionData.mail = email
-      sessionData.mDig = digestMail
-      sessionData.pDig = digestPass
-      sessionData.mv = validCredential
-
-      return new Promise((resolve, reject) => {
-
-        if (sessionData.mv) {
-          resolve({ ok: true, token: 1234567, mail: sessionData.mail, mailEn: sessionData.mDig })
-        }
-        else {
-          reject('Bad credentials')
-        }
-      })
-    }
-
-
-    if (loggingIn) {
-      logIn(userInfo)
-        .then(r => {
-          if (r.ok) {
-            localStorage.setItem('superteam_access', r.token)
-            localStorage.setItem('superteam_email', r.mail)
-            setUsernameLogged(r.email)
-
-            const shortedLogIn = ((r.email).split('@')[0]).toUpperCase()
-            setShortUsernameLogged(shortedLogIn)
-          }
-        })
-        .catch(err => {
-          setTriedWrongCredentials(true)
-        })
-        .finally((e) => {
-          setLoggingIn(false)
-
-          sessionData.mv && setUserLogged(true)
-        })
-    }
-  }, [loggingIn, userInfo])
 
   useEffect(() => {
-    if (triedWrongCredentials) {
+    if (triedWrongCredentials.error) {
+
       var reset = setTimeout(() => {
-        setTriedWrongCredentials(false)
-        setUserInfo({})
+        setTriedWrongCredentials({ error: false })
+        setUserInfo()
       }, 1500)
     }
     return () => {
@@ -117,23 +102,30 @@ export const UserLoggedContext = ({ children }) => {
 
   useEffect(() => {
     const tryRetrieveLocalSession = async () => {
-      const sessionInLocalStorage = {
-        access: localStorage.getItem('superteam_access'),
+      const sessionLS = {
+        token: localStorage.getItem('superteam_token'),
         email: localStorage.getItem('superteam_email')
       }
-      const shortedLocalStorage = ((sessionInLocalStorage.email).split('@')[0]).toUpperCase()
 
-      if (sessionInLocalStorage.access && sessionInLocalStorage.access !== undefined) {
-        setUsernameLogged(sessionInLocalStorage.email)
+      if (
+        sessionLS.email === 'challenge@alkemy.org'
+        && sessionLS.token === 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiZW1haWwiOiJjaGFsbGVuZ2VAYWxrZW15Lm9yZyIsImlhdCI6MTUxNjIzOTAyMn0.ilhFPrG0y7olRHifbjvcMOlH7q2YwlegT0f4aSbryBE'
+      ) {
+        const shortedLocalStorage = ((sessionLS.email).split('@')[0]).toUpperCase()
+
+        setUsernameLogged(sessionLS.email)
         setShortUsernameLogged(shortedLocalStorage)
-        setUENCRYPT(await digestMessage(sessionInLocalStorage.email))
-        setUserLogged(true)
+
+
+        // hardcoded por ahora
+        const mailenc = await digestMessage('challenge@alkemy.org')
+        setUserInfo({ email: sessionLS.email, emailEncrypted: mailenc })
+        setAreCredsValid(true)
       }
       else {
         setUsernameLogged(null)
-        setUENCRYPT(null)
         setShortUsernameLogged(null)
-        setUserLogged(false)
+        setAreCredsValid(false)
       }
     }
     tryRetrieveLocalSession()
@@ -141,11 +133,12 @@ export const UserLoggedContext = ({ children }) => {
 
   return <UserLogged.Provider
     value={{
-      UENCRYPT,
-      isUserLogged, setUserLogged,
+      areCredsValid, setAreCredsValid,
+      userInfo, isUserLogged, setUserLogged,
       usernameLogged, setUsernameLogged,
       shortUsernameLogged, setShortUsernameLogged,
-      loggingIn, tryLogIn, triedWrongCredentials
+      loggingIn, tryLogIn,
+      triedWrongCredentials
     }}
   >
     {children}

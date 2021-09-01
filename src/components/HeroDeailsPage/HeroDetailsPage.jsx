@@ -1,14 +1,15 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
+
 import { useParams } from 'react-router-dom'
 import HeroDetail from './HeroDetail/HeroDetail'
+
 import Loading from '../Loading/Loading'
-import { ManageFirestore } from '../../context/ManageFirestore'
+import LoadingFBWatch from '../LoadingFBWatch/LoadingFBWatch'
 
 const HeroDetailsPage = () => {
   const { idHero } = useParams()
   const [gettingInfo, setGettingInfo] = useState(false)
   const [heroDetails, setHeroDetails] = useState(null)
-  const { updatingFB } = useContext(ManageFirestore)
 
   useEffect(() => {
     const getHero = async (id) => {
@@ -32,16 +33,16 @@ const HeroDetailsPage = () => {
   }, [idHero])
 
   return (
-    idHero && gettingInfo
-      ? <Loading />
-      : heroDetails
-        ? <>
-          <HeroDetail hero={heroDetails} />
-          {
-            updatingFB && <Loading />
-          }
-        </>
-        : '404 - No se encontro al heroe especificado'
+    idHero
+      ? gettingInfo
+        ? <Loading />
+        : heroDetails
+          ? <>
+            <HeroDetail hero={heroDetails} />
+            <LoadingFBWatch />
+          </>
+          : '404 - No se encontro al heroe especificado'
+      : 'No se ingreso un termino valido'
   )
 }
 

@@ -22,6 +22,10 @@ const Footer = ({ pageLocation, scrollTop }) => {
       window.scrollY <= 450 && showBackToTop(false)
     }
     window.addEventListener('scroll', test)
+
+    return () => {
+      window.removeEventListener('scroll', test)
+    }
   }, []);
 
 

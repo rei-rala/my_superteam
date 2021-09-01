@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { SuperTeamManager } from '../../../../context/SuperTeamManagerContext'
-import HeroOptionsBtn from './HeroOptionsBtn/HeroOptionsBtn'
+import HeroOptionsBtn from '../../../HeroOptionsBtn/HeroOptionsBtn'
 import { Link } from 'react-router-dom'
 
 import { replaceImgNotFound } from '../../../../Helpers/Helpers'

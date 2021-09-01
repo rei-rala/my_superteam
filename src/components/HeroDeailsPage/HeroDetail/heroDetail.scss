@@ -93,6 +93,11 @@
     }
   }
 
+  .aliasUL ul {
+    display: flex;
+    flex-direction: column;
+  }
+
   .heroDetail {
     &_Head,
     &_Body {
@@ -114,11 +119,13 @@
         & > ul {
           display: flex;
           flex-direction: column;
-          justify-content: space-evenly;
+          justify-content: stretch;
           height: 100%;
           gap: 2.5%;
           overflow-y: auto;
           transition: all 1s;
+
+          padding: 0.5rem 0 1rem 0;
 
           li {
             display: inline !important;
@@ -166,7 +173,7 @@
 
   .sideData {
     & > ul {
-      justify-content: center;
+      justify-content: space-between !important;
     }
   }
 }

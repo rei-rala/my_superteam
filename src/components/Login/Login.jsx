@@ -10,7 +10,7 @@ const Login = () => {
   return (
     <section className='logInSection'>
 
-      {triedWrongCredentials.error ? <h2>{`Credenciales incorrectas: ${triedWrongCredentials.type} ${triedWrongCredentials.error}`}</h2> : null}
+      {triedWrongCredentials.error ? <h2>{`Error: ${triedWrongCredentials.type}`}</h2> : null}
       <form onSubmit={tryLogIn}>
 
         <div className="loginGroup">
