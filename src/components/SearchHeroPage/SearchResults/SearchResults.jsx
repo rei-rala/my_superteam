@@ -39,7 +39,7 @@ const SearchResults = ({ herosFound, results }) => {
             <h5>{results?.length} {results?.length > 1 ? 'resultados' : 'resultado'}</h5>
             <div className={'cardsContainer'}>
               {
-                results?.map(h => <HeroCard key={'search' + h.id} hero={h} />)
+                results?.map((h, index) => <HeroCard key={'index' + index} hero={h} />)
               }
             </div>
           </>

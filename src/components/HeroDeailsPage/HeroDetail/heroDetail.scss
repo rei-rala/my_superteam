@@ -11,10 +11,6 @@
   border-bottom: 1px solid hsla(0, 0%, 100%, 0.5);
 
   padding-bottom: 1.5rem;
-
-  button {
-    position: sticky;
-  }
 }
 
 .heroDetailContainer {
@@ -27,13 +23,47 @@
 
   margin: 1%;
   width: 98%;
-
   h2 {
     margin: 0.5rem;
   }
 
   button {
-    &:first-child {
+    border-width: 1px;
+
+    &.remove {
+      animation: 1s rotateBtn 1;
+    }
+    &.add {
+      animation: 1s rotateBtn 1;
+    }
+
+    &.remove:hover {
+      svg {
+        fill: red !important;
+      }
+    }
+    &.add:hover {
+      svg {
+        fill: green !important;
+      }
+    }
+  }
+
+  button:hover {
+    border-width: 1px;
+    transform: scale(1.1) !important;
+    background-color: white;
+  }
+
+  .detailOptions {
+    &Desktop,
+    &Mobile {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      width: 100% !important;
+    }
+    &Desktop {
       display: none;
     }
   }
@@ -100,20 +130,40 @@
   }
 }
 
-@media (min-width: 568px) {
-  .heroDetailContainer {
-    button {
-      &:first-child {
-        display: block;
-        position: sticky;
-        top: 5rem;
-        z-index: 99;
+.heroDetailContainer {
+  .heroOptionBtn {
+    min-width: 3.5rem;
+
+    svg {
+      transition: all 1s;
+    }
+
+    &.add {
+      border-color: greenyellow !important;
+      svg {
+        fill: greenyellow;
       }
-      &:last-child {
-        display: none;
+    }
+    &.remove {
+      border-color: red !important;
+      svg {
+        fill: red;
       }
     }
   }
+}
+
+@media (min-width: 568px) {
+  .detailOptionsDesktop {
+    display: flex !important;
+    position: sticky;
+    top: 10%;
+    z-index: 99;
+  }
+  .detailOptionsMobile {
+    display: none !important;
+  }
+
   .sideData {
     & > ul {
       justify-content: center;

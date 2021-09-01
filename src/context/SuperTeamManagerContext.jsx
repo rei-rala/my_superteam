@@ -6,6 +6,8 @@ export const SuperTeamManager = createContext();
 export const SuperTeamManagerContext = ({ children }) => {
 
   const [superTeam, setSuperTeam] = useState([])
+
+
   const [isTeamMaxed, setIsTeamMaxed] = useState(false)
 
   const [totalPowerStats, setTotalPowerStats] = useState(null)
@@ -15,6 +17,7 @@ export const SuperTeamManagerContext = ({ children }) => {
 
   const [heroAvgHeightWeight, setHeroAvgHeightWeight] = useState({ weight: 0, height: 0 })
 
+  const [updatingFB, setUpdatingFB] = useState(false)
 
   useEffect(() => {
     superTeam && superTeam.length >= 6
@@ -141,6 +144,7 @@ export const SuperTeamManagerContext = ({ children }) => {
   return (
     <SuperTeamManager.Provider
       value={{
+        updatingFB, setUpdatingFB,
         superTeam, setSuperTeam, addHero, removeHero,
         isTeamMaxed, checkAlignment, checkMaxByAlignment,
         heroSortingTerms, setHeroSortingTerms,

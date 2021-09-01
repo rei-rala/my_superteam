@@ -9,6 +9,15 @@
   }
 }
 
+@keyframes rotateBtn {
+  from {
+    transform: rotateX(90deg);
+  }
+  to {
+    transform: rotateX(360deg);
+  }
+}
+
 @font-face {
   font-family: "Thunder Lord";
   src: url("./fonts/Thunder\ Lord.ttf") format("truetype");

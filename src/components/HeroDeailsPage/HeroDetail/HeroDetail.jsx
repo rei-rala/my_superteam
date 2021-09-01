@@ -1,11 +1,14 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
 import './heroDetail.scss'
 import TeamPowerStatInfo from '../../HomePage/TeamPowerStatInfo/TeamPowerStatInfo'
 import { useHistory } from 'react-router-dom'
+import HeroOptionsBtn from '../../SearchHeroPage/SearchResults/HeroCard/HeroOptionsBtn/HeroOptionsBtn'
 import { replaceImgNotFound } from '../../../Helpers/Helpers'
+import { SuperTeamManager } from '../../../context/SuperTeamManagerContext'
 
 const HeroDetail = ({ hero }) => {
+  const { superTeam, isTeamMaxed, checkAlignment, checkMaxByAlignment, addHero, removeHero } = useContext(SuperTeamManager)
   const history = useHistory()
 
   const {
@@ -28,7 +31,19 @@ const HeroDetail = ({ hero }) => {
 
   return (
     <section className='heroDetailContainer'>
-      <button onClick={() => history.goBack()}> Volver</button>
+      <div className="detailOptionsDesktop">
+        {
+          superTeam.map(heroInTeam => heroInTeam.id).includes(hero.id)
+            ? <HeroOptionsBtn type='remove' onClick={() => removeHero(hero)} title={`Quitar ${hero.name} de equipo`} />
+            : isTeamMaxed
+              ? <HeroOptionsBtn title={`Tu equipo esta completo`} />
+              : checkMaxByAlignment(hero)
+                ? <HeroOptionsBtn title={`Tu equipo alcanzo el tope para heroes con orientacion ${checkAlignment(hero) === 'good' ? 'buena' : 'mala'} `} />
+                : <HeroOptionsBtn type='add' onClick={() => addHero(hero)} title={`Agregar ${hero.name} a equipo`} />
+        }
+        <button onClick={() => history.goBack()}> Volver</button>
+      </div>
+
       <div className="heroDetail_Head">
         <h2>{name}</h2>
         <div className="heroPowerStats">
@@ -65,7 +80,18 @@ const HeroDetail = ({ hero }) => {
 
 
       </div>
-      <button onClick={() => history.goBack()}> Volver</button>
+      <div className="detailOptionsMobile">
+        {
+          superTeam.map(heroInTeam => heroInTeam.id).includes(hero.id)
+            ? <HeroOptionsBtn type='remove' onClick={() => removeHero(hero)} title={`Quitar ${hero.name} de equipo`} />
+            : isTeamMaxed
+              ? <HeroOptionsBtn title={`Tu equipo esta completo`} />
+              : checkMaxByAlignment(hero)
+                ? <HeroOptionsBtn title={`Tu equipo alcanzo el tope para heroes con orientacion ${checkAlignment(hero) === 'good' ? 'buena' : 'mala'} `} />
+                : <HeroOptionsBtn type='add' onClick={() => addHero(hero)} title={`Agregar ${hero.name} a equipo`} />
+        }
+        <button onClick={() => history.goBack()}> Volver</button>
+      </div>
     </section>
   )
 }

@@ -1,14 +1,20 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import './searchHero.scss'
 
 const SearchHero = ({ gettingInfo, setGettingInfo, setHerosFound, results, setResults }) => {
-
   const [searchMenuActive, setSearchMenuActive] = useState(true)
   const toggleSearchMenu = (e) => {
     e.preventDefault()
     setSearchMenuActive(!searchMenuActive)
   }
+
+
+
+  const axios = require('axios').default
+  const CancelToken = axios.CancelToken;
+  const source = CancelToken.source();
+
 
   const searchHero = async (ev) => {
     ev.preventDefault()
@@ -28,17 +34,13 @@ const SearchHero = ({ gettingInfo, setGettingInfo, setHerosFound, results, setRe
 
     if (((tgt.tagname === 'FORM' || seek.length > 1) || tgt.tagname === 'INPUT')) {
       setGettingInfo(true)
-      const axios = require('axios').default
 
-      await axios.get(`https://superheroapi.com/api.php/547377806383395/search/${seek}`)
+      await axios.get(`https://superheroapi.com/api.php/547377806383395/search/${seek}`, {
+        cancelToken: source.token
+      })
         .then(r => (r.data))
         .then(data => {
-
-          if (data?.response === 'error') {
-            setHerosFound({ error: true })
-            setResults([])
-          }
-          else if (data?.response === 'success') {
+          if (data?.response === 'success') {
             setHerosFound(data)
             setResults(data.results)
           }
@@ -47,9 +49,16 @@ const SearchHero = ({ gettingInfo, setGettingInfo, setHerosFound, results, setRe
             setResults([])
           }
         })
+        .catch(console.log)
         .finally(() => setGettingInfo(false))
     }
   }
+
+  useEffect(() => {
+    /*     return () => {
+          source.cancel('Operation canceled by the user.')
+        } */
+  }, [source])
 
 
   return (

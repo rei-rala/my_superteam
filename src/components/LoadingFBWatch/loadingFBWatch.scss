@@ -1,0 +1,22 @@
+.LOADINGFB {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 990;
+  position: absolute;
+  top: 0;
+
+  .loadingTitle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%);
+    z-index: 1001;
+  }
+
+  .loadingContainer {
+    top: 50%;
+    left: 50%;
+    z-index: 1000;
+  }
+}

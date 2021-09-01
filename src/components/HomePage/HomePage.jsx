@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { UserLogged } from '../../context/UserLoggedContext'
 import { SuperTeamManager } from '../../context/SuperTeamManagerContext'
 import { Link } from 'react-router-dom'
@@ -9,17 +9,24 @@ import TeamPowerStatInfo from './TeamPowerStatInfo/TeamPowerStatInfo'
 import SortButton from '../SortButton/SortButton'
 
 import HeroTeamCard from './HeroTeamCard/HeroTeamCard'
+import { ManageFirestore } from '../../context/ManageFirestore'
 
 const HomePage = () => {
 
   const { superTeam, manageSuperTeam, removeHero, heroSortingTerms, totalPowerStats, averagePowerStats, heroAvgHeightWeight } = useContext(SuperTeamManager)
   const { isUserLogged, usernameLogged } = useContext(UserLogged)
+  const { setForceUpdate } = useContext(ManageFirestore)
+
+  const [updateOnce, setUpdateOnce] = useState(true)
 
   const { height, weight } = heroAvgHeightWeight
 
   const [refreshesBySort, setRefreshesBySort] = useState(0);
   const toggleRefresh = () => setRefreshesBySort(refreshesBySort + 1)
 
+  useEffect(() => {
+    isUserLogged && updateOnce && setForceUpdate(true) && setUpdateOnce(false)
+  }, [isUserLogged, updateOnce, setForceUpdate])
 
   return (
     <section className="home">
@@ -74,7 +81,7 @@ const HomePage = () => {
                 </div>
             }
           </>
-          : null
+          : 'ERROR'
       }
     </section >
   )

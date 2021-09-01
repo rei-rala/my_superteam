@@ -1,8 +1,8 @@
 $cardColorBad: hsla(358, 100%, 31%, 0.75);
-$heroBordersBad: 3px ridge $cardColorBad;
+$heroBordersBad: 3px outset $cardColorBad;
 
 $cardColorGood: hsla(108, 100%, 31%, 0.75);
-$heroBordersGood: 3px ridge $cardColorGood;
+$heroBordersGood: 3px outset $cardColorGood;
 
 .badHero {
   border: $heroBordersBad;
@@ -53,15 +53,17 @@ $heroBordersGood: 3px ridge $cardColorGood;
   border-radius: 3rem 1rem;
 
   cursor: default;
-  overflow: hidden;
+  overflow: hidden !important;
   animation: 1s aparecer 1;
+  transition: transform 0.5s;
 
   strong {
     position: absolute;
     top: 0;
-    background-color: rgba(0, 0, 0, 0.75);
+    background-color: rgba(0, 0, 0, 0.8);
+    border-bottom: 2px solid transparent;
     width: 100%;
-    padding: 0.1rem 0;
+    padding: 0.2rem 0;
 
     z-index: 9;
   }
@@ -75,9 +77,6 @@ $heroBordersGood: 3px ridge $cardColorGood;
     height: 100%;
   }
 
-  i {
-    margin: 1rem;
-  }
   button,
   b {
     cursor: pointer;
@@ -106,13 +105,8 @@ $heroBordersGood: 3px ridge $cardColorGood;
   }
 
   .flip-card {
-    background-color: transparent;
     width: 100%;
     height: 100%;
-    perspective: 1000px;
-    -ms-perspective: 1000px;
-    -moz-perspective: 1000px;
-    -webkit-perspective: 1000px;
   }
 
   .flip-card-inner {
@@ -120,38 +114,35 @@ $heroBordersGood: 3px ridge $cardColorGood;
     width: 100%;
     height: 100%;
     text-align: center;
-    transition: transform 0.7s ease-out;
-    transform-style: preserve-3d;
-    -webkit-transform-style: preserve-3d;
-    background-color: hsl(0, 100%, 3%);
+
+    .flip-card-back {
+      opacity: 0;
+      background-color: hsla(0, 0%, 0%, 0.5);
+    }
   }
 
-  .flip-card:active .flip-card-inner,
-  .flip-card:focus .flip-card-inner {
-    transform: rotateY(180deg);
+  .flip-card-inner:active {
+    .flip-card-front {
+      filter: blur(2px);
+    }
+    .flip-card-back {
+      opacity: 1;
+    }
   }
 
   .flip-card-front,
   .flip-card-back {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    overflow: hidden;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+
     position: absolute;
     width: 100%;
     height: 100%;
-
-    backface-visibility: hidden;
-    -moz-backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-  }
-
-  .flip-card-back {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: hsla(0, 100%, 3%, 0.75);
-    transform: rotateY(180deg);
+    transition: all 0.5s;
   }
 }
 
@@ -173,8 +164,13 @@ $heroBordersGood: 3px ridge $cardColorGood;
     }
   }
 
-  .flip-card:hover .flip-card-inner {
-    transform: rotateY(180deg);
+  .flip-card-inner:hover {
+    .flip-card-front {
+      filter: blur(2px);
+    }
+    .flip-card-back {
+      opacity: 1;
+    }
   }
 }
 

@@ -21,7 +21,7 @@ const MenuMobileActive = ({ activeMenuMobile, toggleMenuMobile }) => {
         </ul>
       </nav>
       <hr />
-      <Logout />
+      <Logout aditionalOnClick={toggleMenuMobile} />
 
     </div>
   )

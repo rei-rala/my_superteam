@@ -22,9 +22,6 @@ const HeroCard = ({ hero }) => {
       case 'good':
         setAlignmentHero('goodHero')
         break
-      case 'neutral':
-        setAlignmentHero('neutralHero')
-        break
       default:
         setAlignmentHero('neutralHero')
         break

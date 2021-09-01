@@ -6,13 +6,15 @@ import SortButton from '../SortButton/SortButton'
 import { SuperTeamManager } from '../../context/SuperTeamManagerContext'
 import { HoldSearch } from '../../context/HoldSearchContext'
 import Loading from '../Loading/Loading'
+import { ManageFirestore } from '../../context/ManageFirestore'
 
 
 const SearchHeroPage = () => {
   const { herosFound, setHerosFound, results, setResults } = useContext(HoldSearch)
+  const { heroSortingTerms, setHeroSortingTerms } = useContext(SuperTeamManager)
+  const { updatingFB } = useContext(ManageFirestore)
 
   const { isUserLogged } = useContext(UserLogged)
-  const { heroSortingTerms, setHeroSortingTerms } = useContext(SuperTeamManager)
   const [gettingInfo, setGettingInfo] = useState(false)
 
 
@@ -37,6 +39,11 @@ const SearchHeroPage = () => {
         isUserLogged
           ? <>
             <SearchHero setGettingInfo={setGettingInfo} setHerosFound={setHerosFound} results={results} setResults={setResults} />
+            {
+              updatingFB
+                ? <Loading />
+                : null
+            }
             {
               gettingInfo
                 ? <Loading />

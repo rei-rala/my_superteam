@@ -70,11 +70,18 @@ div.logo:hover {
       text-decoration-color: white;
     }
 
-    .logOut div {
+    .logOut {
       display: flex;
+      align-items: center;
       flex-direction: column;
+      text-align: center;
 
       height: 100%;
+
+      button {
+        margin: auto;
+        padding: 3px;
+      }
     }
   }
 }
@@ -98,10 +105,18 @@ div.logo:hover {
 
   .userboard {
     display: flex;
-    gap: 1rem;
     justify-content: center;
+    gap: 1rem;
+    color: lightgreen;
+
     button {
       padding: 5px;
+
+      &:hover {
+        background-color: red;
+        border-color: white;
+        color: white;
+      }
     }
   }
 
