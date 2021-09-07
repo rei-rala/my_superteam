@@ -1,7 +1,7 @@
-$cardColorBad: hsla(358, 100%, 31%, 0.75);
+$cardColorBad: hsl(358, 100%, 31%);
 $heroBordersBad: 3px outset $cardColorBad;
 
-$cardColorGood: hsla(108, 100%, 31%, 0.75);
+$cardColorGood: hsl(108, 100%, 31%);
 $heroBordersGood: 3px outset $cardColorGood;
 
 .badHero {
@@ -26,11 +26,11 @@ $heroBordersGood: 3px outset $cardColorGood;
 
 .neutralHero {
   border: 3px ridge white;
-  background-color: rgba(0, 0, 0, 0.45);
+  background-color: hsl(0, 0%, 0%);
 
   button {
     border: none;
-    background: rgba(255, 255, 255, 0.5);
+    background: hsl(0, 0%, 100%);
 
     svg {
       fill: black !important;
