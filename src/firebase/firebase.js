@@ -1,6 +1,5 @@
 import firebase from '@firebase/app-compat';
 import 'firebase/compat/firestore'
-console.log(process.env)
 
 const firebaseConfig = {
   appId: process.env.REACT_APP_APPID,
