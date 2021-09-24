@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import './searchResults.scss'
 import HeroCard from './HeroCard/HeroCard'
 
-const SearchResults = ({ herosFound, results }) => {
+const SearchResults = ({  results }) => {
 
   const [easyModeActive, setEasyModeActive] = useState(false)
 
@@ -20,7 +20,7 @@ const SearchResults = ({ herosFound, results }) => {
   return (
     <div className={`foundContainer ${easyModeActive ? 'easyHover' : ''}`}>
       {
-        results?.length
+        results?.length > 0
           ? <>
             <div className="infoSwitch">
               <button onClick={manageEasyMode} title={`Click para ${easyModeActive ? 'dejar de ' : ''}ver los powerstats del heroe al posicionarse sobre su imagen`}>
@@ -43,7 +43,7 @@ const SearchResults = ({ herosFound, results }) => {
               }
             </div>
           </>
-          : herosFound?.error
+          : results.length === 0
             ? 'No hay resultado que cumpla con su termino de busqueda'
             : null
       }

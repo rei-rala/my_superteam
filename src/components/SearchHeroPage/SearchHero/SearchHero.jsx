@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, {  useState } from 'react'
 
 import './searchHero.scss'
 
-const SearchHero = ({ gettingInfo, setGettingInfo, setHerosFound, results, setResults }) => {
+const SearchHero = ({ gettingInfo, setGettingInfo, results, setResults }) => {
   const [searchMenuActive, setSearchMenuActive] = useState(true)
   const toggleSearchMenu = (e) => {
     e.preventDefault()
@@ -15,10 +15,9 @@ const SearchHero = ({ gettingInfo, setGettingInfo, setHerosFound, results, setRe
   const CancelToken = axios.CancelToken;
   const source = CancelToken.source();
 
-
   const searchHero = async (ev) => {
     ev.preventDefault()
-    ev.stopPropagation();
+
     const tgt = ev.target
 
     let seek;
@@ -41,11 +40,9 @@ const SearchHero = ({ gettingInfo, setGettingInfo, setHerosFound, results, setRe
         .then(r => (r.data))
         .then(data => {
           if (data?.response === 'success') {
-            setHerosFound(data)
             setResults(data.results)
           }
           else {
-            setHerosFound({ error: true })
             setResults([])
           }
         })
@@ -54,11 +51,12 @@ const SearchHero = ({ gettingInfo, setGettingInfo, setHerosFound, results, setRe
     }
   }
 
-  useEffect(() => {
-    /*     return () => {
-          source.cancel('Operation canceled by the user.')
-        } */
-  }, [source])
+  // No consegui cancelar el get
+  /*   useEffect(() => {
+      return () => {
+        source.cancel('Operation canceled by the user.')
+      }
+    }, [source]) */
 
 
   return (

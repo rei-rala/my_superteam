@@ -10,7 +10,7 @@ import { ManageFirestore } from '../../context/ManageFirestore'
 
 
 const SearchHeroPage = () => {
-  const { herosFound, setHerosFound, results, setResults } = useContext(HoldSearch)
+  const { results, setResults } = useContext(HoldSearch)
   const { heroSortingTerms, setHeroSortingTerms } = useContext(SuperTeamManager)
   const { updatingFB } = useContext(ManageFirestore)
 
@@ -23,14 +23,14 @@ const SearchHeroPage = () => {
 
   useEffect(() => {
 
-    if (herosFound?.results?.length > 1) {
+    if (results?.length > 1) {
 
-      const firstHeroStats = Object.keys((herosFound.results[0]).powerstats).map(s => `powerstats.${s}`)
-      const customSortingTerms = ['name', 'biography.alignment', ...firstHeroStats]
-      setHeroSortingTerms(customSortingTerms)
+      const firstHeroStats = results[0] ? Object.keys((results[0]).powerstats).map(s => `powerstats.${s}`) : undefined
+      const customSortingTerms = firstHeroStats ? ['name', 'biography.alignment', ...firstHeroStats] : undefined
+      customSortingTerms && setHeroSortingTerms(customSortingTerms)
     }
 
-  }, [herosFound, setHeroSortingTerms])
+  }, [results, setHeroSortingTerms])
 
 
   return (
@@ -38,7 +38,7 @@ const SearchHeroPage = () => {
       {
         isUserLogged
           ? <>
-            <SearchHero setGettingInfo={setGettingInfo} setHerosFound={setHerosFound} results={results} setResults={setResults} />
+            <SearchHero setGettingInfo={setGettingInfo} results={results} setResults={setResults} />
             {
               updatingFB
                 ? <Loading />
@@ -49,9 +49,9 @@ const SearchHeroPage = () => {
                 ? <Loading />
                 : < div className="control">
                   {
-                    herosFound?.results?.length > 1 && heroSortingTerms && <SortButton toSort={herosFound.results} displayFunction={setResults} arraySortingTerms={heroSortingTerms} varUseEffect={toggleRefresh} />
+                    results?.length > 1 && heroSortingTerms && <SortButton toSort={results} displayFunction={setResults} arraySortingTerms={heroSortingTerms} varUseEffect={toggleRefresh} />
                   }
-                  <SearchResults herosFound={herosFound} results={results} />
+                  <SearchResults results={results} />
                 </div>
             }
           </>
