@@ -49,7 +49,7 @@ const SearchHeroPage = () => {
                 ? <Loading />
                 : < div className="control">
                   {
-                    results?.length > 1 && heroSortingTerms && <SortButton toSort={results} displayFunction={setResults} arraySortingTerms={heroSortingTerms} varUseEffect={toggleRefresh} />
+                    results?.length > 1 && heroSortingTerms && <SortButton toSort={results} arraySortingTerms={heroSortingTerms} varUseEffect={toggleRefresh} />
                   }
                   <SearchResults results={results} />
                 </div>

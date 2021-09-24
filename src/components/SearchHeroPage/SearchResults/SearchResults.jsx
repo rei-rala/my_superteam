@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import './searchResults.scss'
 import HeroCard from './HeroCard/HeroCard'
 
-const SearchResults = ({  results }) => {
+const SearchResults = ({ results }) => {
 
   const [easyModeActive, setEasyModeActive] = useState(false)
 

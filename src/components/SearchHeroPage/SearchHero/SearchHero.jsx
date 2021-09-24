@@ -1,4 +1,4 @@
-import React, {  useState } from 'react'
+import React, { useState } from 'react'
 
 import './searchHero.scss'
 
@@ -40,7 +40,19 @@ const SearchHero = ({ gettingInfo, setGettingInfo, results, setResults }) => {
         .then(r => (r.data))
         .then(data => {
           if (data?.response === 'success') {
-            setResults(data.results)
+
+            const heroResultsList = data.results
+
+            for (let hero in heroResultsList) {
+              for (let ps in heroResultsList[hero].powerstats) {
+                if (isNaN(heroResultsList[hero].powerstats[ps])) {
+                  heroResultsList[hero].powerstats[ps] = 0
+                } else {
+                  heroResultsList[hero].powerstats[ps] = parseInt(heroResultsList[hero].powerstats[ps])
+                }
+              }
+            }
+            setResults(heroResultsList)
           }
           else {
             setResults([])

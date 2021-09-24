@@ -7,19 +7,18 @@ import './sortButton.scss'
 /* 
 Props recibidos:
 
-*displayFunction: es la funcion que tenemos que utilizar para cambiar nuestra lista de items visualizados (puede ser un set de useState o una funcion adicional de managment)
 *toSort: es lo que vamos a ordenar, generalmente es el valor de nuestro useState
 *arrayStortingTerms: es un array hardcodeado que le damos a esta prop para que cree botones para ordenar nuestro toSort, tener en cuenta que los valores del array deben ser iguales a las de nuestro producto que queramos ordenar ejemplo: ['price', 'name', 'stock'] para un producto = { price: 100, name: 'algo', stock:0}. PUEDEN ACCEDERSE A NESTED PROPIEDADES/POSICIONES MEDIANTE NOTACION DE PUNTO Ej: ['propiedad.0.propiedad', '5.propiedad'] 
 *varUseEffect: es un useEffect que creamos en el componente PADRE, que cuidara que la transformacion (ordenamiento) de nuestra lista de productos impacte en el dom
 */
-const SortButton = ({ toSort, displayFunction, arraySortingTerms, varUseEffect }) => {
+const SortButton = ({ toSort, arraySortingTerms, varUseEffect }) => {
 
   //primera variable es tipo de orden asc/desc, segunda variable es la razon del sort(precio, nombre, etc)
   const [sortType, setSortType] = useState({ orden: 'none', razon: 'none', esNumerico: false })
   const manageSortState = ({ orden, razon, esNumerico }) => setSortType({ orden, razon, esNumerico })
 
-  // ? nuestra verdadera funcion encargada del orden, para invocarla hay que enviarle de argumentos: sortableThingy = toSort, manageDisplay=displayFunction, sortBy=sortingTerm
-  const toggleSort = (sortableThingy, manageDisplay, sortBy) => {
+  // ? nuestra verdadera funcion encargada del orden, para invocarla hay que enviarle de argumentos: sortableThingy = toSort,  sortBy=sortingTerm
+  const toggleSort = (sortableThingy, sortBy) => {
     // Encerramos en un bloque try por si las dudas
     try {
       // En caso de tener nesting de propiedades (separados por puntos), tendremos un array de niveles
@@ -27,7 +26,7 @@ const SortButton = ({ toSort, displayFunction, arraySortingTerms, varUseEffect }
       // Ultimo nivel
       const lastLevel = sortLevels.slice(-1).pop() || sortBy
 
-      manageDisplay(sortableThingy.sort((a, b) => {
+      sortableThingy.sort((a, b) => {
         // Variables para mutarlas con los diferentes niveles
         let preSortA = a
         let preSortB = b
@@ -41,7 +40,7 @@ const SortButton = ({ toSort, displayFunction, arraySortingTerms, varUseEffect }
           preSortB = preSortB[nestingLevel]
         }
 
-        let isNumber = !(isNaN(preSortA) && isNaN(preSortB)) || (preSortA === 'Null' || preSortB === 'Null')
+        let isNumber = !(isNaN(preSortA))
         // Compruebo si existe lo que vamos a hacer sort
         // Comprobacion de que NO este ordenado de forma ascendente y por la razon del sort
         //  si se cumple, deducimos que esta ordenado descendentemente o no ordenado, entonces lo ordenamos ascendente
@@ -65,7 +64,8 @@ const SortButton = ({ toSort, displayFunction, arraySortingTerms, varUseEffect }
             ? 1
             : -1
         }
-      }))
+      })
+      //)
 
     }
     // Si falla, entendemos que lo que le pasamos no es ordenable o fallo algo en la FN, lo imprimimos en consola
@@ -89,7 +89,7 @@ const SortButton = ({ toSort, displayFunction, arraySortingTerms, varUseEffect }
               key={sortingTerm}
               title={`Ordenar por ${sortingTerm.split('.').pop()}`}
               onClick={() => {
-                toggleSort(toSort, displayFunction, sortingTerm)
+                toggleSort(toSort, sortingTerm)
                 // ! Dado que algo debio cambiar, activamos la variable que escucha el useEffect
                 varUseEffect()
               }

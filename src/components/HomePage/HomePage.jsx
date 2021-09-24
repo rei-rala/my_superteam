@@ -12,7 +12,7 @@ import HeroTeamCard from './HeroTeamCard/HeroTeamCard'
 
 const HomePage = () => {
 
-  const { superTeam, manageSuperTeam, removeHero, heroSortingTerms, totalPowerStats, averagePowerStats, heroAvgHeightWeight } = useContext(SuperTeamManager)
+  const { superTeam, removeHero, heroSortingTerms, totalPowerStats, averagePowerStats, heroAvgHeightWeight } = useContext(SuperTeamManager)
   const { isUserLogged, usernameLogged } = useContext(UserLogged)
 
   const { height, weight } = heroAvgHeightWeight
@@ -54,7 +54,7 @@ const HomePage = () => {
                     </p>
                   </div>
                   <div className="mySuperTeam">
-                    <SortButton toSort={superTeam} displayFunction={manageSuperTeam} varUseEffect={toggleRefresh} arraySortingTerms={heroSortingTerms} />
+                    <SortButton toSort={superTeam} varUseEffect={toggleRefresh} arraySortingTerms={heroSortingTerms} />
                     {
                       superTeam.map(h => <HeroTeamCard
                         key={'myHero' + h.id}
