@@ -16,7 +16,7 @@ const HeroDetailsPage = () => {
       const axios = require('axios').default
       setGettingInfo(true)
 
-      await axios.get(`https://superheroapi.com/api.php/547377806383395/${id}`)
+      await axios.get(`https://superheroapi.com/api.php/${process.env.REACT_APP_SUPERHEROAPIKEY}/${id}`)
         .then(r => (r.data))
         .then(data => {
           if (data?.response === 'success') {

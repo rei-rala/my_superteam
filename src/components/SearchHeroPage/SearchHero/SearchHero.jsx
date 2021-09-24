@@ -35,7 +35,7 @@ const SearchHero = ({ gettingInfo, setGettingInfo, setHerosFound, results, setRe
     if (((tgt.tagname === 'FORM' || seek.length > 1) || tgt.tagname === 'INPUT')) {
       setGettingInfo(true)
 
-      await axios.get(`https://superheroapi.com/api.php/547377806383395/search/${seek}`, {
+      await axios.get(`https://superheroapi.com/api.php/${process.env.REACT_APP_SUPERHEROAPIKEY}/search/${seek}`, {
         cancelToken: source.token
       })
         .then(r => (r.data))
